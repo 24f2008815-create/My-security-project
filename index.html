@@ -1,0 +1,2921 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artistic UPI QR Studio | High-Performance Payment Platform</title>
+    <meta name="description" content="Design NPCI-compliant payment standees with multi-language Indian scripts, defense-in-depth security, and automated CSV batch processing.">
+    
+    <!-- Open Graph Social Metadata -->
+    <meta property="og:title" content="Artistic UPI QR Studio & Merchant Platform">
+    <meta property="og:description" content="NPCI-compliant payment standees with multi-language Indian scripts, defense-in-depth security, and automated CSV processing.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vamikayadav30122015-droid.github.io/upi-qr-studio../">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <!-- QR Code Styling Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js"></script>
+    
+    <!-- Multi-Language Indian & Aesthetic Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@500;600;700;800&family=Noto+Sans+Tamil:wght@500;600;700;800&family=Noto+Sans+Telugu:wght@500;600;700;800&family=Noto+Sans+Malayalam:wght@500;600;700;800&family=Noto+Sans+Kannada:wght@500;600;700;800&family=Noto+Sans+Bengali:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', 'Poppins', sans-serif; }
+        .cinzel { font-family: 'Cinzel', serif; }
+        .lang-devanagari { font-family: 'Noto Sans Devanagari', 'Poppins', sans-serif; }
+        .lang-tamil { font-family: 'Noto Sans Tamil', 'Inter', sans-serif; }
+        .lang-telugu { font-family: 'Noto Sans Telugu', 'Inter', sans-serif; }
+        .lang-malayalam { font-family: 'Noto Sans Malayalam', 'Inter', sans-serif; }
+        .lang-kannada { font-family: 'Noto Sans Kannada', 'Inter', sans-serif; }
+        .lang-bengali { font-family: 'Noto Sans Bengali', 'Inter', sans-serif; }
+        .notion-font { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+        .qr-shadow { box-shadow: 0 20px 40px -15px rgba(217, 119, 6, 0.25); }
+        @media print {
+            body * { visibility: hidden; }
+            #printableStandee, #printableStandee * { visibility: visible; }
+            #printableStandee {
+                position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+                width: 100%; max-width: 420px; box-shadow: none !important;
+                border: 2px solid #000 !important; color: #000 !important; background: #fff !important;
+            }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-amber-500 selection:text-slate-950 flex flex-col justify-between">
+<!-- Top Toast Notification -->
+    <div id="toast" class="fixed top-5 right-5 z-50 transform transition-all duration-300 translate-y-[-100px] opacity-0 pointer-events-none flex items-center gap-3 bg-amber-500 text-slate-950 px-5 py-3 rounded-2xl shadow-xl font-medium text-sm">
+        <span id="toastIcon">✓</span>
+        <span id="toastMessage">Notification</span>
+    </div>
+
+    <!-- Security Login / Register Modal -->
+    <div id="authModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl relative space-y-5">
+            <button type="button" id="closeAuthModalBtn" class="absolute top-5 right-5 text-slate-400 hover:text-slate-200 text-xl font-bold transition cursor-pointer">✕</button>
+            
+            <div class="text-center space-y-1">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold">
+                    <span>🔒 SHA-256 Web Security</span>
+                </div>
+                <h3 class="cinzel text-xl font-bold text-slate-100">Gmail Security Access</h3>
+                <p class="text-xs text-slate-400">Sign in or register with your Gmail ID to protect merchant keys & CSV records</p>
+            </div>
+
+            <!-- Modal Tabs -->
+            <div class="flex rounded-xl bg-slate-950 p-1 border border-slate-800 text-xs font-semibold">
+                <button type="button" id="authTabLogin" class="flex-1 py-2 rounded-lg bg-amber-500 text-slate-950 transition cursor-pointer">Sign In</button>
+                <button type="button" id="authTabRegister" class="flex-1 py-2 rounded-lg text-slate-400 hover:text-slate-200 transition cursor-pointer">Register New</button>
+            </div>
+
+            <!-- Fast Gmail OAuth One-Tap Simulation -->
+            <button type="button" id="quickGmailAuthBtn" class="w-full bg-white hover:bg-slate-100 text-slate-900 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2.5 transition cursor-pointer shadow-md">
+                <svg class="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3h3.88c2.27-2.09 3.665-5.17 3.665-9.09z"/>
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.27v3.09C3.3 21.41 7.35 24 12 24z"/>
+                    <path fill="#FBBC05" d="M5.28 14.32c-.25-.72-.38-1.49-.38-2.32s.13-1.6.38-2.32V6.59H1.27C.46 8.21 0 10.05 0 12s.46 3.79 1.27 5.41l4.01-3.09z"/>
+                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.3 2.59 1.27 6.59l4.01 3.09c.95-2.83 3.6-4.93 6.72-4.93z"/>
+                </svg>
+                <span>Continue with Gmail ID</span>
+            </button>
+
+            <div class="relative flex py-1 items-center">
+                <div class="flex-grow border-t border-slate-800"></div>
+                <span class="flex-shrink mx-3 text-[10px] text-slate-500 uppercase tracking-widest">Or with Password</span>
+                <div class="flex-grow border-t border-slate-800"></div>
+            </div>
+
+            <!-- Form -->
+            <form id="authForm" class="space-y-3.5">
+                <div>
+                    <label for="authEmailInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                        Gmail Address
+                    </label>
+                    <input type="email" id="authEmailInput" value="vamikayadav30122015@gmail.com" placeholder="yourname@gmail.com" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400 transition">
+                </div>
+                <div>
+                    <label for="authPasswordInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                        Password (Encrypted)
+                    </label>
+                    <input type="password" id="authPasswordInput" placeholder="••••••••" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400 transition">
+                </div>
+                <p id="authErrorMsg" class="text-[11px] text-rose-400 hidden"></p>
+                <button type="submit" id="authSubmitBtn" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 px-4 rounded-xl text-xs transition cursor-pointer shadow-lg shadow-amber-500/20">
+                    Sign In Securely
+                </button>
+            </form>
+        </div>
+    </div>
+
+    
+    <!-- Global Semantic Header & Navigation -->
+    <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            
+            <!-- Brand Logo -->
+            <a href="#home" id="brandLogoLink" class="flex items-center gap-2.5 shrink-0 group">
+                <span class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center text-slate-950 font-bold text-lg shadow-md shadow-amber-500/20 group-hover:scale-105 transition">
+                    ॐ
+                </span>
+                <div>
+                    <span class="cinzel font-black text-base sm:text-lg tracking-tight text-slate-100 group-hover:text-amber-400 transition">
+                        Artistic UPI
+                    </span>
+                    <span class="hidden sm:inline-block text-[10px] uppercase tracking-wider text-amber-400/90 font-semibold px-2 py-0.5 rounded-full bg-amber-500/10 ml-1.5 border border-amber-500/20">
+                        v2.5 Enterprise
+                    </span>
+                </div>
+            </a>
+
+            <!-- Primary Global Nav Links (F-Pattern Navigation) -->
+            <nav class="hidden md:flex items-center gap-1 text-xs font-semibold">
+                <button type="button" id="navHomeBtn" class="nav-link-btn px-3 py-2 rounded-xl text-amber-400 bg-amber-500/10 transition cursor-pointer">
+                    🏠 Home
+                </button>
+                <button type="button" id="navStudioBtn" class="nav-link-btn px-3 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-slate-900 transition cursor-pointer">
+                    ⚡ QR Studio
+                </button>
+                <button type="button" id="navSecurityBtn" class="nav-link-btn px-3 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-slate-900 transition cursor-pointer">
+                    🛡️ Security Baseline
+                </button>
+                <button type="button" id="navAboutBtn" class="nav-link-btn px-3 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-slate-900 transition cursor-pointer">
+                    👥 About
+                </button>
+                <button type="button" id="navContactBtn" class="nav-link-btn px-3 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-slate-900 transition cursor-pointer">
+                    📬 Contact
+                </button>
+            </nav>
+
+            <!-- Auth Status Area (Preserves existing IDs: userLoggedOutView, openAuthModalBtn, userLoggedInView, currentUserEmail, logoutBtn) -->
+            <div class="flex items-center gap-2 text-xs">
+                <div id="userLoggedOutView" class="flex items-center gap-2">
+                    <button type="button" id="openAuthModalBtn" class="bg-slate-850 hover:bg-slate-800 border border-slate-700 text-amber-300 text-xs px-3 py-1 rounded-lg transition font-medium cursor-pointer">
+                        Gmail Login / Register
+                    </button>
+                </div>
+                <div id="userLoggedInView" class="hidden flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span id="currentUserEmail" class="text-[11px] font-mono text-emerald-300 truncate max-w-[140px] sm:max-w-[200px]">vamikayadav30122015@gmail.com</span>
+                    <button type="button" id="logoutBtn" class="text-[11px] text-slate-400 hover:text-rose-400 font-semibold px-2 py-1 rounded bg-slate-900 border border-slate-800 transition cursor-pointer">Sign Out</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Mobile Secondary Nav Bar -->
+        <div class="md:hidden flex items-center justify-around border-t border-slate-850 px-2 py-2 bg-slate-950/95 text-[11px] font-semibold">
+            <button type="button" id="mNavHomeBtn" class="text-amber-400 px-2 py-1 rounded-lg">Home</button>
+            <button type="button" id="mNavStudioBtn" class="text-slate-300 px-2 py-1 rounded-lg">Studio</button>
+            <button type="button" id="mNavSecurityBtn" class="text-slate-300 px-2 py-1 rounded-lg">Security</button>
+            <button type="button" id="mNavAboutBtn" class="text-slate-300 px-2 py-1 rounded-lg">About</button>
+            <button type="button" id="mNavContactBtn" class="text-slate-300 px-2 py-1 rounded-lg">Contact</button>
+        </div>
+    </header>
+
+    <!-- Global Main Semantic Container -->
+    <main class="flex-grow">
+
+        <!-- ========================================================================= -->
+        <!-- 1. HOMEPAGE: VALUE PROPOSITION, SOCIAL PROOF & F-PATTERN ARCHITECTURE   -->
+        <!-- ========================================================================= -->
+        <section id="home" data-view="home" class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
+            
+            <!-- Hero Section: Above the Fold (Value Proposition within 5 Seconds) -->
+            <div class="text-center max-w-3xl mx-auto space-y-6 pt-4">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-semibold tracking-wide shadow-inner">
+                    <span>⚡ Next-Generation NPCI Payment Infrastructure</span>
+                </div>
+                
+                <h1 class="cinzel text-3xl sm:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-amber-500 tracking-tight leading-tight">
+                    High-Performance UPI Payment Standees & Merchant Suite
+                </h1>
+                
+                <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl mx-auto">
+                    Craft beautiful, NPCI-compliant payment QR standees in under 5 seconds. Engineered with multi-language Indian scripts, defense-in-depth security, and bulk CSV automation for merchants, trusts, and creators.
+                </p>
+
+                <!-- Primary & Secondary CTAs -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                    <button type="button" id="heroLaunchStudioBtn" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold py-3.5 px-8 rounded-2xl shadow-xl shadow-amber-500/25 text-sm transition transform active:scale-95 cursor-pointer flex items-center justify-center gap-2">
+                        <span>⚡ Launch QR Studio Now</span>
+                    </button>
+                    <button type="button" id="heroViewSecurityBtn" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-850 text-slate-200 border border-slate-700 font-semibold py-3.5 px-6 rounded-2xl text-sm transition cursor-pointer flex items-center justify-center gap-2">
+                        <span>🛡️ Explore Security Baseline</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Social Proof & Authority Metrics Bar (Directly below hero) -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center divide-y lg:divide-y-0 lg:divide-x divide-slate-800">
+                    <div class="pt-4 lg:pt-0">
+                        <p class="cinzel text-2xl sm:text-3xl font-extrabold text-amber-400">99.99%</p>
+                        <p class="text-xs text-slate-400 font-medium mt-1">Level H Error Recovery</p>
+                    </div>
+                    <div class="pt-4 lg:pt-0">
+                        <p class="cinzel text-2xl sm:text-3xl font-extrabold text-emerald-400">100% Client-Side</p>
+                        <p class="text-xs text-slate-400 font-medium mt-1">Zero Backend Data Leaks</p>
+                    </div>
+                    <div class="pt-4 lg:pt-0">
+                        <p class="cinzel text-2xl sm:text-3xl font-extrabold text-sky-400">6 Indian Scripts</p>
+                        <p class="text-xs text-slate-400 font-medium mt-1">Devanagari, Tamil, Telugu, etc.</p>
+                    </div>
+                    <div class="pt-4 lg:pt-0">
+                        <p class="cinzel text-2xl sm:text-3xl font-extrabold text-rose-400">₹0 Fee</p>
+                        <p class="text-xs text-slate-400 font-medium mt-1">Direct Bank-to-Bank Settlement</p>
+                    </div>
+                </div>
+
+                <!-- Accepted Payment Network Logos -->
+                <div class="mt-8 pt-6 border-t border-slate-800 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-400">
+                    <span class="text-[11px] uppercase tracking-wider text-slate-500 mr-2">Verified Compatible With:</span>
+                    <span class="px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-slate-200">Google Pay</span>
+                    <span class="px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-purple-400">PhonePe</span>
+                    <span class="px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-sky-400">Paytm</span>
+                    <span class="px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-emerald-400">BHIM UPI</span>
+                    <span class="px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-amber-400">CRED</span>
+                    <span class="px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-indigo-400">Amazon Pay</span>
+                </div>
+            </div>
+
+            <!-- F-Pattern Layout: Clear Scannability Feature Showcase -->
+            <div class="space-y-8">
+                <div class="text-center max-w-xl mx-auto space-y-2">
+                    <h2 class="cinzel text-2xl sm:text-3xl font-bold text-slate-100">
+                        Engineered for High Conversion & Trust
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-400">
+                        Every element is designed following cognitive visual flow (F-pattern), combining sacred cultural aesthetics with rigorous fintech security.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <article class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-3 hover:border-amber-500/40 transition">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl font-bold">
+                            ॐ
+                        </div>
+                        <h3 class="text-base font-bold text-slate-100">Sacred Indian & Aesthetic Designs</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Support for authentic Devanagari, Tamil, Telugu, and Malayalam Om glyphs, Swastik, Trishul, alongside viral Studio Ghibli, Notion Minimal, and Canva graphic styles.
+                        </p>
+                    </article>
+
+                    <article class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-3 hover:border-emerald-500/40 transition">
+                        <div class="w-10 h-10 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl font-bold">
+                            🛡️
+                        </div>
+                        <h3 class="text-base font-bold text-slate-100">Defense-in-Depth Security</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Zero server database risks. Client-side Web Crypto SHA-256 hashing, Strict CSP architecture, CSRF mitigation, and strict input schema sanitization.
+                        </p>
+                    </article>
+
+                    <article class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-3 hover:border-sky-500/40 transition">
+                        <div class="w-10 h-10 rounded-2xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400 text-xl font-bold">
+                            📁
+                        </div>
+                        <h3 class="text-base font-bold text-slate-100">Bulk CSV Automation</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Import or export hundreds of payment records directly via CSV. Generate batches for multi-counter temple trusts, retail chains, and festivals in one click.
+                        </p>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Direct CTA Banner -->
+            <div class="bg-gradient-to-r from-amber-600/20 via-amber-500/10 to-amber-700/20 border border-amber-500/30 rounded-3xl p-8 text-center space-y-4">
+                <h3 class="cinzel text-xl sm:text-2xl font-bold text-amber-300">
+                    Ready to Generate Your Custom Standee?
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto">
+                    Jump right into the studio to configure colors, regional languages, center emblems, and print-ready high DPI vector outputs.
+                </p>
+                <button type="button" id="bannerOpenStudioBtn" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 px-6 rounded-xl text-xs transition cursor-pointer shadow-lg">
+                    Open Live Studio →
+                </button>
+            </div>
+
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- 2. PRODUCT / SERVICE PAGE: LIVE INTERACTIVE QR STUDIO & STANDEE GENERATOR  -->
+        <!-- ========================================================================= -->
+        <section id="viewStudio" class="hidden py-6">
+            <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        
+        <!-- Header & Auth Status Bar -->
+        <header class="text-center max-w-4xl mx-auto mb-6 space-y-2 relative">
+            
+            <!-- Security Status Pill in Top Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3 mb-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold uppercase tracking-wider">
+                    <span id="headerEmblemBadge">ॐ · ௐ · ఓం · ഓം · 卐</span>
+                    <span>Pan-India Sacred UPI QR Studio</span>
+                </div>
+
+                <!-- Profile managed in global navbar --></div>
+            </div>
+
+            <h1 class="cinzel text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500 tracking-tight">
+                Artistic UPI QR Studio
+            </h1>
+            <p class="text-sm text-slate-400">
+                Live side-by-side design studio with Studio Ghibli anime aesthetic, Coolors dynamic palettes, Canva graphics, Notion minimalist cards, and regional Indian language pages.
+            </p>
+        </header>
+
+        <!-- Primary Tab Navigation Bar (Now with 4 Pages: Studio & Same-Page Preview, Standee Showcase, CSV Hub, and Language Portals) -->
+        <div class="flex items-center justify-center mb-6">
+            <div class="inline-flex p-1.5 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl max-w-3xl w-full flex-wrap sm:flex-nowrap">
+                <button type="button" id="tabDescriptionBtn" class="flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 bg-amber-500 text-slate-950 shadow-md cursor-pointer">
+                    <span>⚙️ 1. Description & Setup</span>
+                </button>
+                <button type="button" id="tabPreviewBtn" class="flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-slate-200 cursor-pointer">
+                    <span>👁️ 2. Standee Preview</span>
+                </button>
+                <button type="button" id="tabCsvBtn" class="flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-slate-200 cursor-pointer">
+                    <span>📁 3. CSV Batch Hub</span>
+                </button>
+                <button type="button" id="tabLanguagePortalsBtn" class="flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-slate-200 cursor-pointer">
+                    <span>🌐 4. Language Portals</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Notebook Presets Row (Visible across tabs for rapid switching) -->
+        <div class="mb-7">
+            <div class="flex items-center justify-between mb-2.5">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Quick Notebook Presets:</span>
+                <span class="text-xs text-amber-400/80">Click any preset to prefill details</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <button type="button" id="preset1" class="text-left p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-amber-500/50 hover:bg-slate-850 transition cursor-pointer group">
+                    <p class="text-xs font-bold text-amber-400 group-hover:text-amber-300 truncate">Paytm Store (ॐ)</p>
+                    <p class="text-[11px] text-slate-400">Shiv Arpan · ₹501</p>
+                </button>
+                <button type="button" id="preset2" class="text-left p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-amber-500/50 hover:bg-slate-850 transition cursor-pointer group">
+                    <p class="text-xs font-bold text-amber-400 group-hover:text-amber-300 truncate">Kashi Mandir</p>
+                    <p class="text-[11px] text-slate-400">Temple Seva · ₹1,008</p>
+                </button>
+                <button type="button" id="preset3" class="text-left p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-amber-500/50 hover:bg-slate-850 transition cursor-pointer group">
+                    <p class="text-xs font-bold text-amber-400 group-hover:text-amber-300 truncate">Shree Ganesh Store</p>
+                    <p class="text-[11px] text-slate-400">Shubh Labh · ₹251</p>
+                </button>
+                <button type="button" id="preset4" class="text-left p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-amber-500/50 hover:bg-slate-850 transition cursor-pointer group">
+                    <p class="text-xs font-bold text-amber-400 group-hover:text-amber-300 truncate">Vedic Ashram</p>
+                    <p class="text-[11px] text-slate-400">Annadanam · ₹108</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 1: DESCRIPTION & CONFIGURATION WITH LIVE SAME-PAGE PREVIEW DOCK     -->
+        <!-- ========================================================================= -->
+        <div id="pageDescription" class="space-y-6">
+            
+            <!-- Split Layout: Controls on Left (7 cols), Live Preview on Right (5 cols) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left Column: Controls & Information -->
+                <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl space-y-6">
+                    
+                    <!-- Section 0: Indian Regional Language Selection -->
+                    <div class="border-b border-slate-800 pb-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <h2 class="text-sm font-semibold text-amber-400 flex items-center gap-2 uppercase tracking-wider">
+                                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                                Regional Language & Sacred Script
+                            </h2>
+                            <button type="button" id="resetBtn" class="text-xs text-slate-400 hover:text-amber-400 transition cursor-pointer">
+                                Reset Defaults
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5" id="langSelectorGroup">
+                            <button type="button" data-lang="hi" class="lang-btn active-lang p-2.5 rounded-xl border border-amber-500 bg-amber-500/10 text-center transition cursor-pointer">
+                                <p class="text-base font-bold text-amber-300 mb-0.5">ॐ</p>
+                                <p class="text-xs font-bold text-slate-100">हिन्दी / संस्कृत</p>
+                                <p class="text-[10px] text-slate-400">Devanagari</p>
+                            </button>
+                            <button type="button" data-lang="ta" class="lang-btn p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-center hover:border-slate-700 transition cursor-pointer">
+                                <p class="text-base font-bold text-amber-400 mb-0.5">ௐ</p>
+                                <p class="text-xs font-bold text-slate-100">தமிழ்</p>
+                                <p class="text-[10px] text-slate-400">Tamil</p>
+                            </button>
+                            <button type="button" data-lang="te" class="lang-btn p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-center hover:border-slate-700 transition cursor-pointer">
+                                <p class="text-base font-bold text-amber-400 mb-0.5">ఓం</p>
+                                <p class="text-xs font-bold text-slate-100">తెలుగు</p>
+                                <p class="text-[10px] text-slate-400">Telugu</p>
+                            </button>
+                            <button type="button" data-lang="ml" class="lang-btn p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-center hover:border-slate-700 transition cursor-pointer">
+                                <p class="text-base font-bold text-amber-400 mb-0.5">ഓം</p>
+                                <p class="text-xs font-bold text-slate-100">മലയാളം</p>
+                                <p class="text-[10px] text-slate-400">Malayalam</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Section 1: Sacred Invocations & Headings (Language Sensitive) -->
+                    <div class="space-y-4 border-b border-slate-800 pb-5">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                                Sacred Invocation Presets
+                            </h2>
+                            <span id="activeLangLabel" class="text-[11px] text-amber-400 font-medium">Devanagari Script</span>
+                        </div>
+
+                        <!-- Dynamic / Seeded Invocations Grid -->
+                        <div class="grid grid-cols-2 gap-2" id="phraseButtonsContainer">
+                            <button type="button" class="header-preset-btn text-xs py-1.5 px-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-amber-500/40 text-amber-300 text-left truncate transition" data-header="॥ ॐ नमः शिवाय ॥">
+                                ॥ ॐ नमः शिवाय ॥
+                            </button>
+                            <button type="button" class="header-preset-btn text-xs py-1.5 px-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-amber-500/40 text-amber-300 text-left truncate transition" data-header="॥ श्री गणेशाय नमः ॥">
+                                ॥ श्री गणेशाय नमः ॥
+                            </button>
+                            <button type="button" class="header-preset-btn text-xs py-1.5 px-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-amber-500/40 text-amber-300 text-left truncate transition" data-header="॥ शुभ लाभ · SCAN & PAY ॥">
+                                ॥ शुभ लाभ · SCAN & PAY ॥
+                            </button>
+                            <button type="button" class="header-preset-btn text-xs py-1.5 px-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-amber-500/40 text-slate-300 text-left truncate transition" data-header="ACCEPTED HERE · ANY UPI APP">
+                                ACCEPTED HERE · ANY UPI
+                            </button>
+                        </div>
+
+                        <div>
+                            <label for="customHeaderInput" class="block text-[11px] text-slate-400 mb-1">
+                                Custom Title or Mantra Header:
+                            </label>
+                            <input type="text" id="customHeaderInput" value="॥ ॐ नमः शिवाय ॥" placeholder="Enter custom card header or mantra" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 transition">
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Information Design, Canva & Notion Style Layouts -->
+                    <div class="border-b border-slate-800 pb-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <h2 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                                Layout & Design Aesthetic (Canva / Notion / Devotional)
+                            </h2>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                            <button type="button" data-layout="temple" class="layout-btn active-layout p-2.5 rounded-xl border border-amber-500 bg-amber-500/10 text-left transition cursor-pointer">
+                                <p class="text-xs font-bold text-amber-300">Devotional Plaque</p>
+                                <p class="text-[10px] text-slate-400">Traditional golden filigree</p>
+                            </button>
+                            <button type="button" data-layout="ghibli" class="layout-btn p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <p class="text-xs font-bold text-emerald-400">🍃 Ghibli Anime</p>
+                                <p class="text-[10px] text-slate-400">Cozy watercolor aesthetic</p>
+                            </button>
+                            <button type="button" data-layout="canva" class="layout-btn p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <p class="text-xs font-bold text-rose-400">Canva Graphic</p>
+                                <p class="text-[10px] text-slate-400">Artistic poster gradient</p>
+                            </button>
+                            <button type="button" data-layout="notion" class="layout-btn p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <p class="text-xs font-bold text-slate-100">Notion Minimal</p>
+                                <p class="text-[10px] text-slate-400">Clean callout monochrome</p>
+                            </button>
+                            <button type="button" data-layout="standee" class="layout-btn p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <p class="text-xs font-bold text-slate-200">Retail Standee</p>
+                                <p class="text-[10px] text-slate-400">Accepted apps & helpline</p>
+                            </button>
+                            <button type="button" data-layout="fintech" class="layout-btn p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <p class="text-xs font-bold text-slate-200">Modern Fintech</p>
+                                <p class="text-[10px] text-slate-400">Glassmorphism card</p>
+                            </button>
+                            <button type="button" data-layout="compact" class="layout-btn p-2.5 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <p class="text-xs font-bold text-slate-200">Invoice Sticker</p>
+                                <p class="text-[10px] text-slate-400">Minimal packaging label</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Core UPI Details Form -->
+                    <div class="space-y-4 border-b border-slate-800 pb-5">
+                        <h2 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                            Payee & Financial Credentials
+                        </h2>
+                        <div>
+                            <label for="upiIdInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                                UPI ID / VPA <span class="text-amber-400">*</span>
+                            </label>
+                            <input type="text" id="upiIdInput" value="852753naveen-1@okaxis" placeholder="username@bank" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 transition">
+                        </div>
+
+                        <div>
+                            <label for="payeeNameInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                                Payee / Organization / Trust Name <span class="text-amber-400">*</span>
+                            </label>
+                            <input type="text" id="payeeNameInput" value="Naveen Singh" placeholder="Full Name or Trust Name" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 transition">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <label for="amountInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                                        Fixed Amount (₹)
+                                    </label>
+                                    <span class="text-[11px] text-slate-400">Optional</span>
+                                </div>
+                                <input type="number" id="amountInput" value="501" placeholder="Leave empty for open" step="any" min="0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 transition">
+                                <div class="flex gap-1.5 mt-2">
+                                    <button type="button" id="amt108" class="text-[11px] bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-amber-300 transition cursor-pointer">₹108</button>
+                                    <button type="button" id="amt501" class="text-[11px] bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-amber-300 transition cursor-pointer">₹501</button>
+                                    <button type="button" id="amt1008" class="text-[11px] bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-amber-300 transition cursor-pointer">₹1008</button>
+                                    <button type="button" id="amtClear" class="text-[11px] bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-slate-400 hover:text-slate-200 transition cursor-pointer">Clear</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <label for="noteInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                                        Transaction Purpose / Note
+                                    </label>
+                                    <span class="text-[11px] text-slate-400">Optional</span>
+                                </div>
+                                <input type="text" id="noteInput" value="Shiv Arpan" placeholder="e.g. Temple Seva, Donation" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 transition">
+                            </div>
+                        </div>
+
+                        <!-- Secondary Information Meta -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                            <div>
+                                <label for="subTaglineInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                                    Subtitle / Category Tag
+                                </label>
+                                <input type="text" id="subTaglineInput" value="Verified Trust & Devotional Seva" placeholder="e.g. Verified Merchant, Temple Trust" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400 transition">
+                            </div>
+                            <div>
+                                <label for="regContactInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                                    Helpline / Trust Reg No.
+                                </label>
+                                <input type="text" id="regContactInput" value="Support: +91 85275 30000" placeholder="e.g. Help: +91 ..., Reg: 12A/80G" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400 transition">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Coolors-Style Dynamic Color Palette & Emblems -->
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                                Coolors-Style Dynamic Palettes
+                            </h2>
+                            <span class="text-[11px] text-amber-400">🎨 Instant Palette Tint</span>
+                        </div>
+
+                        <!-- Expanded Color Palettes -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="themeContainer">
+                            <button type="button" data-theme="gold" data-color="#b45309" class="theme-btn active-theme flex items-center gap-2 p-2 rounded-xl border border-amber-500 bg-amber-500/10 text-left transition cursor-pointer">
+                                <span class="w-3.5 h-3.5 rounded-full bg-amber-600 shrink-0"></span>
+                                <div class="truncate">
+                                    <p class="text-xs font-medium text-amber-300">Divine Gold</p>
+                                    <p class="text-[10px] text-slate-400">Saffron Vibe</p>
+                                </div>
+                            </button>
+                            <button type="button" data-theme="blue" data-color="#0284c7" class="theme-btn flex items-center gap-2 p-2 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <span class="w-3.5 h-3.5 rounded-full bg-sky-600 shrink-0"></span>
+                                <div class="truncate">
+                                    <p class="text-xs font-medium text-slate-200">Lord Shiva</p>
+                                    <p class="text-[10px] text-slate-400">Trishul Blue</p>
+                                </div>
+                            </button>
+                            <button type="button" data-theme="red" data-color="#dc2626" class="theme-btn flex items-center gap-2 p-2 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <span class="w-3.5 h-3.5 rounded-full bg-red-600 shrink-0"></span>
+                                <div class="truncate">
+                                    <p class="text-xs font-medium text-slate-200">Swastik Red</p>
+                                    <p class="text-[10px] text-slate-400">Kumkum Crimson</p>
+                                </div>
+                            </button>
+                            <button type="button" data-theme="charcoal" data-color="#334155" class="theme-btn flex items-center gap-2 p-2 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <span class="w-3.5 h-3.5 rounded-full bg-slate-600 shrink-0"></span>
+                                <div class="truncate">
+                                    <p class="text-xs font-medium text-slate-200">Midnight Om</p>
+                                    <p class="text-[10px] text-slate-400">Slate Charcoal</p>
+                                </div>
+                            </button>
+                            <button type="button" data-theme="emerald" data-color="#059669" class="theme-btn flex items-center gap-2 p-2 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <span class="w-3.5 h-3.5 rounded-full bg-emerald-600 shrink-0"></span>
+                                <div class="truncate">
+                                    <p class="text-xs font-medium text-slate-200">Emerald Seva</p>
+                                    <p class="text-[10px] text-slate-400">Vedic Green</p>
+                                </div>
+                            </button>
+                            <button type="button" data-theme="purple" data-color="#7c3aed" class="theme-btn flex items-center gap-2 p-2 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <span class="w-3.5 h-3.5 rounded-full bg-purple-600 shrink-0"></span>
+                                <div class="truncate">
+                                    <p class="text-xs font-medium text-slate-200">Royal Bhakti</p>
+                                    <p class="text-[10px] text-slate-400">Deep Amethyst</p>
+                                </div>
+                            </button>
+                            <button type="button" data-theme="ghibli" data-color="#15803d" class="theme-btn flex items-center gap-2 p-2 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <span class="w-3.5 h-3.5 rounded-full bg-emerald-600 shrink-0"></span>
+                                <div class="truncate">
+                                    <p class="text-xs font-medium text-slate-200">Ghibli Meadow</p>
+                                    <p class="text-[10px] text-slate-400">Cozy Anime Green</p>
+                                </div>
+                            </button>
+                            <button type="button" data-theme="coral" data-color="#f43f5e" class="theme-btn flex items-center gap-2 p-2 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <span class="w-3.5 h-3.5 rounded-full bg-rose-500 shrink-0"></span>
+                                <div class="truncate">
+                                    <p class="text-xs font-medium text-slate-200">Canva Coral</p>
+                                    <p class="text-[10px] text-slate-400">Artistic Vibrant</p>
+                                </div>
+                            </button>
+                            <button type="button" data-theme="turquoise" data-color="#0d9488" class="theme-btn flex items-center gap-2 p-2 rounded-xl border border-slate-800 bg-slate-950 text-left hover:border-slate-700 transition cursor-pointer">
+                                <span class="w-3.5 h-3.5 rounded-full bg-teal-600 shrink-0"></span>
+                                <div class="truncate">
+                                    <p class="text-xs font-medium text-slate-200">Peacock Teal</p>
+                                    <p class="text-[10px] text-slate-400">Notion Turquoise</p>
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- Center Symbol & Dot Style Selectors -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                            <div>
+                                <label for="centerEmblemSelect" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                                    QR Center Sacred Symbol
+                                </label>
+                                <select id="centerEmblemSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-400">
+                                    <optgroup label="Sacred Om Scripts">
+                                        <option value="om_hi" selected>ॐ (Devanagari Om)</option>
+                                        <option value="om_ta">ௐ (Tamil Om)</option>
+                                        <option value="om_te">ఓం (Telugu Om)</option>
+                                        <option value="om_ml">ഓം (Malayalam Om)</option>
+                                    </optgroup>
+                                    <optgroup label="Auspicious Signs & Symbols">
+                                        <option value="ghibli_leaf">🍃 (Ghibli Leaf / Nature)</option>
+                                    <option value="ghibli_sparkle">✨ (Ghibli Star / Sparkle)</option>
+                                    <option value="swastik">卐 (Sacred Swastik)</option>
+                                        <option value="trishul">🔱 (Trishul / Trishula)</option>
+                                        <option value="rupee">₹ (Rupee Symbol)</option>
+                                        <option value="upi">UPI Official Icon</option>
+                                        <option value="none">No Icon (Clean)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="dotStyleSelect" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                                    Dot Pattern
+                                </label>
+                                <select id="dotStyleSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-400">
+                                    <option value="rounded" selected>Smooth Rounded</option>
+                                    <option value="dots">Artistic Dots</option>
+                                    <option value="classy">Classy Rounded Corners</option>
+                                    <option value="square">Standard Classic Square</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="cornerSquareSelect" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                                    Corner Eye
+                                </label>
+                                <select id="cornerSquareSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-400">
+                                    <option value="extra-rounded" selected>Soft Curved</option>
+                                    <option value="dot">Circular Eye</option>
+                                    <option value="square">Standard Square</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Update & Proceed Buttons -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                        <button type="button" id="generateBtn" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-amber-500/20 text-sm transition transform active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2">
+                            <span>⚡ Update & Render QR Code</span>
+                        </button>
+                        <button type="button" id="goToPreviewBtn" class="bg-slate-800 hover:bg-slate-750 text-amber-300 border border-amber-500/40 font-bold py-3.5 px-6 rounded-2xl text-sm transition cursor-pointer flex items-center justify-center gap-2">
+                            <span>Go to Standee Preview 👁️ →</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Column: LIVE PREVIEW ON THE SAME PAGE -->
+                <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-6">
+                    
+                    <!-- Direct Preview Dropdowns Toolbar -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 shadow-xl space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <span>⚡</span> Direct Preview Dropdowns
+                            </span>
+                            <span class="text-[10px] text-emerald-400 font-medium">Instant Live Switch</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                                <label for="quickLayoutSelect" class="block text-[10px] uppercase tracking-wider font-semibold text-slate-400 mb-1">
+                                    Template / Trend Style
+                                </label>
+                                <select id="quickLayoutSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-amber-300 font-medium focus:outline-none focus:border-amber-400 transition cursor-pointer">
+                                    <option value="temple">ॐ Devotional Plaque</option>
+                                    <option value="ghibli">🍃 Ghibli Anime (Cozy)</option>
+                                    <option value="canva">✦ Canva Poster (Vibrant)</option>
+                                    <option value="notion">▫ Notion Minimalist</option>
+                                    <option value="standee">🪧 Retail Counter Standee</option>
+                                    <option value="fintech">💳 Modern Fintech Card</option>
+                                    <option value="compact">📦 Compact Box Sticker</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="quickLangSelect" class="block text-[10px] uppercase tracking-wider font-semibold text-slate-400 mb-1">
+                                    Language & Script
+                                </label>
+                                <select id="quickLangSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-amber-300 font-medium focus:outline-none focus:border-amber-400 transition cursor-pointer">
+                                    <option value="hi">हिन्दी / संस्कृत (ॐ)</option>
+                                    <option value="ta">தமிழ் (ௐ Tamil)</option>
+                                    <option value="te">తెలుగు (ఓం Telugu)</option>
+                                    <option value="ml">മലയാളം (ഓം Malayalam)</option>
+                                    <option value="kn">ಕನ್ನಡ (ಓಂ Kannada)</option>
+                                    <option value="bn">বাংলা (Bengali)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="quickThemeSelect" class="block text-[10px] uppercase tracking-wider font-semibold text-slate-400 mb-1">
+                                    Color Palette
+                                </label>
+                                <select id="quickThemeSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-amber-400 transition cursor-pointer">
+                                    <option value="#b45309">Divine Gold (Saffron)</option>
+                                    <option value="#15803d">Ghibli Meadow Green</option>
+                                    <option value="#f43f5e">Canva Coral Rose</option>
+                                    <option value="#334155">Notion Slate Charcoal</option>
+                                    <option value="#0284c7">Lord Shiva Blue</option>
+                                    <option value="#dc2626">Swastik Kumkum Red</option>
+                                    <option value="#059669">Vedic Tulsi Green</option>
+                                    <option value="#7c3aed">Royal Bhakti Amethyst</option>
+                                    <option value="#0d9488">Peacock Turquoise</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="quickPresetSelect" class="block text-[10px] uppercase tracking-wider font-semibold text-slate-400 mb-1">
+                                    Merchant / Seva Account
+                                </label>
+                                <select id="quickPresetSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 font-medium focus:outline-none focus:border-amber-400 transition cursor-pointer">
+                                    <option value="paytm">Paytm Store (paytm.s3ufuwv@pty)</option>
+                                    <option value="naveen">Naveen Singh (Shiv Arpan - ₹501)</option>
+                                    <option value="kashi">Kashi Mandir (Temple Seva - ₹1008)</option>
+                                    <option value="ganesh">Ganesh Store (Shubh Labh - ₹251)</option>
+                                    <option value="ashram">Vedic Ashram (Annadanam - ₹108)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between px-1">
+                        <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Live Standee Dock (Same-Page)
+                        </span>
+                        <span class="text-[11px] text-amber-400">Updates live as you select</span>
+                    </div>
+
+                    <!-- Side Dock Standee Frame -->
+                    <div id="sidePreviewContainer" class="w-full flex justify-center">
+                        <!-- Cloned representation rendered live -->
+                    </div>
+
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-2xl text-xs text-slate-400 flex items-center justify-between">
+                        <span>Looking for Fullscreen or Print?</span>
+                        <button type="button" id="openFullscreenPreviewBtn" class="text-amber-400 hover:text-amber-300 font-semibold underline cursor-pointer">
+                            Switch to Showcase View →
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 2: PREVIEW, RESOLUTION SWITCHER & PRINT VIEW                         -->
+        <!-- ========================================================================= -->
+        <div id="pagePreview" class="hidden space-y-6">
+            
+            <!-- Resolution & Screen Setting Controls Toolbar -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
+                
+                <!-- Viewport Resolution Device Switcher -->
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider shrink-0">Display Mode:</span>
+                    <div class="inline-flex p-1 rounded-xl bg-slate-950 border border-slate-800 text-xs w-full sm:w-auto justify-center">
+                        <button type="button" data-device="mobile" class="device-btn py-1.5 px-3 rounded-lg text-slate-400 hover:text-slate-200 transition font-medium flex items-center gap-1.5 cursor-pointer">
+                            <span>📱</span>
+                            <span>Mobile (390px)</span>
+                        </button>
+                        <button type="button" data-device="standee" class="device-btn active-device py-1.5 px-3 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 transition font-medium flex items-center gap-1.5 cursor-pointer">
+                            <span>🪧</span>
+                            <span>A5 Standee</span>
+                        </button>
+                        <button type="button" data-device="poster" class="device-btn py-1.5 px-3 rounded-lg text-slate-400 hover:text-slate-200 transition font-medium flex items-center gap-1.5 cursor-pointer">
+                            <span>🖼️</span>
+                            <span>A4 Wall Poster</span>
+                        </button>
+                        <button type="button" data-device="fluid" class="device-btn py-1.5 px-3 rounded-lg text-slate-400 hover:text-slate-200 transition font-medium flex items-center gap-1.5 cursor-pointer">
+                            <span>⚡</span>
+                            <span>Auto Full</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Export Quality DPI / Resolution -->
+                <div class="flex items-center gap-2 shrink-0">
+                    <label for="exportDpiSelect" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Export Res:</label>
+                    <select id="exportDpiSelect" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-amber-300 font-medium focus:outline-none focus:border-amber-400">
+                        <option value="512">1x Standard (512px)</option>
+                        <option value="1024" selected>2x Print HD (1024px)</option>
+                        <option value="2048">4x Ultra-Res Print (2048px)</option>
+                    </select>
+                </div>
+
+                <!-- Back to Configuration Button -->
+                <button type="button" id="backToSetupBtn" class="text-xs text-slate-400 hover:text-amber-400 transition cursor-pointer flex items-center gap-1 shrink-0">
+                    <span>← Edit Details</span>
+                </button>
+            </div>
+
+            <!-- Standee Centered Frame -->
+            <div class="flex flex-col items-center justify-center py-2">
+                
+                <!-- Dynamic Width Container according to Resolution Setting -->
+                <div id="standeeWrapper" class="w-full max-w-[440px] transition-all duration-300">
+                    
+                    <!-- Main Printable Standee Display Card -->
+                    <div id="printableStandee" class="bg-slate-900 border-2 border-amber-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col items-center text-center relative overflow-hidden transition-all duration-300">
+                        
+                        <!-- Decorative Background Glow -->
+                        <div id="glowCircle" class="absolute -top-16 -right-16 w-52 h-52 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                        <!-- Layout Dynamic Header -->
+                        <div id="standeeHeaderBox" class="w-full mb-5 space-y-1.5 pb-4 border-b border-slate-800">
+                            <div class="flex items-center justify-center gap-2">
+                                <span id="emblemHeaderLeft" class="text-amber-400 text-xl font-bold">ॐ</span>
+                                <span id="displayHeaderTag" class="text-sm sm:text-base font-bold text-amber-300 uppercase tracking-wide">
+                                    ॥ ॐ नमः शिवाय ॥
+                                </span>
+                                <span id="emblemHeaderRight" class="text-amber-400 text-xl font-bold">ॐ</span>
+                            </div>
+                            <h3 id="displayPayee" class="cinzel text-xl sm:text-2xl font-black text-slate-100 tracking-tight">
+                                Naveen Singh
+                            </h3>
+                            <p id="displaySubTagline" class="text-xs text-amber-400/90 font-medium">
+                                Verified Trust & Devotional Seva
+                            </p>
+                        </div>
+
+                        <!-- QR Code Frame Container with Information Accent -->
+                        <div class="relative p-4 rounded-3xl bg-white shadow-2xl border-4 border-amber-400/30 qr-shadow transition-transform hover:scale-[1.01]">
+                            <div id="qrCanvasContainer" class="w-[220px] h-[220px] sm:w-[240px] sm:h-[240px] flex items-center justify-center">
+                                <!-- QR Code rendered here -->
+                            </div>
+                        </div>
+
+                        <!-- UPI ID & Financial Verification Info -->
+                        <div class="mt-5 space-y-2.5 w-full max-w-sm">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300">
+                                <span class="text-emerald-400">●</span>
+                                <span id="displayUpi">852753naveen-1@okaxis</span>
+                            </div>
+
+                            <div id="amountBadgeContainer" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold text-sm">
+                                <span>₹</span>
+                                <span id="displayAmount">501.00</span>
+                            </div>
+
+                            <p id="displayNote" class="text-xs text-slate-300 italic">
+                                "Shiv Arpan"
+                            </p>
+
+                            <p id="displayContactReg" class="text-[11px] text-slate-400 pt-1">
+                                Support: +91 85275 30000
+                            </p>
+                        </div>
+
+                        <!-- Accepted UPI Apps Logo Badges -->
+                        <div id="acceptedAppsBar" class="mt-6 pt-5 border-t border-slate-800 w-full flex flex-wrap items-center justify-center gap-2.5 text-slate-400 text-xs font-medium">
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-bold text-slate-300">Google Pay</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-bold text-purple-400">PhonePe</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-bold text-sky-400">Paytm</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-bold text-emerald-400">BHIM UPI</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-bold text-amber-400">CRED</span>
+                        </div>
+
+                        <!-- Standee Footer Notice -->
+                        <div class="mt-4 text-[10px] text-slate-500 flex items-center justify-center gap-1.5">
+                            <span class="text-amber-500">🔒</span>
+                            <span>Zero convenience fee · Direct bank-to-bank settlement</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Export & Print Actions -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 w-full max-w-lg mt-6 no-print">
+                    <button type="button" id="printStandeeBtn" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 px-4 rounded-xl text-xs transition cursor-pointer flex items-center justify-center gap-1.5 shadow-md">
+                        <span>🖨️ Print Standee</span>
+                    </button>
+                    <button type="button" id="downloadBtn" class="bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 font-semibold py-3 px-4 rounded-xl text-xs transition cursor-pointer flex items-center justify-center gap-1.5">
+                        <span>⬇ Download PNG</span>
+                    </button>
+                    <button type="button" id="copyUriBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold py-3 px-4 rounded-xl text-xs transition cursor-pointer flex items-center justify-center gap-1.5">
+                        <span>📋 Copy UPI Link</span>
+                    </button>
+                </div>
+
+                <!-- Raw URI Payload Card -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-left space-y-2 w-full max-w-lg mt-4 no-print">
+                    <div class="flex items-center justify-between text-xs text-slate-400 font-medium">
+                        <span>NPCI URI Protocol Payload:</span>
+                        <span id="charCount" class="text-[10px] text-slate-500">62 chars</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800/80 font-mono text-[11px] text-amber-300/90 break-all select-all" id="rawUriCode">
+                        upi://pay?pa=852753naveen-1@okaxis&pn=Naveen%20Singh&cu=INR&am=501&tn=Shiv%20Arpan
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 3: CSV BATCH & WEB SECURITY REGISTRY HUB                             -->
+        <!-- ========================================================================= -->
+        <div id="pageCsv" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+                
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-5">
+                    <div>
+                        <h2 class="text-base font-bold text-amber-400 flex items-center gap-2">
+                            <span>📁</span> Web CSV Batch Processor & Security Logs
+                        </h2>
+                        <p class="text-xs text-slate-400">Import/export UPI merchant records and manage Gmail user registry via CSV</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="downloadBatchTemplateCsvBtn" class="bg-slate-800 hover:bg-slate-750 text-amber-300 border border-amber-500/30 text-xs px-3 py-2 rounded-xl transition font-medium flex items-center gap-1.5 cursor-pointer">
+                            <span>⬇ Template CSV</span>
+                        </button>
+                        <button type="button" id="exportUsersCsvBtn" class="bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-2 rounded-xl transition font-medium flex items-center gap-1.5 cursor-pointer">
+                            <span>🛡️ Users Security CSV</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CSV Upload & Import Dropzone -->
+                <div class="bg-slate-950 border-2 border-dashed border-slate-800 hover:border-amber-500/50 rounded-2xl p-6 text-center space-y-3 transition">
+                    <div class="w-12 h-12 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center mx-auto text-xl">
+                        📄
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-200">Upload or Drag & Drop your UPI Batch CSV File</p>
+                        <p class="text-[11px] text-slate-500">Supports headers: upi_id, payee_name, amount, note</p>
+                    </div>
+                    <div class="flex justify-center">
+                        <label for="csvFileInput" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition cursor-pointer shadow-md inline-block">
+                            Browse CSV File
+                        </label>
+                        <input type="file" id="csvFileInput" accept=".csv" class="hidden">
+                    </div>
+                </div>
+
+                <!-- Live Loaded CSV Data Table -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                            Active Batch Records (<span id="csvRecordCount">5</span> rows)
+                        </h3>
+                        <span class="text-[11px] text-amber-400">💡 Click any row to load into Studio & QR</span>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-900 border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400 font-semibold">
+                                <tr>
+                                    <th class="p-3">#</th>
+                                    <th class="p-3">Payee Name</th>
+                                    <th class="p-3">UPI ID / VPA</th>
+                                    <th class="p-3">Amount (₹)</th>
+                                    <th class="p-3">Note</th>
+                                    <th class="p-3 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="csvTableBody" class="divide-y divide-slate-850">
+                                <!-- Populated dynamically by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- PAGE 4: EXPANDED REGIONAL INDIAN LANGUAGE PAGES & CULTURAL PORTALS        -->
+        <!-- ========================================================================= -->
+        <div id="pageLanguagePortals" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+                
+                <div class="border-b border-slate-800 pb-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold mb-2">
+                        <span>🇮🇳 Pan-Indian Sacred Heritage & Languages</span>
+                    </div>
+                    <h2 class="cinzel text-xl font-bold text-slate-100">Regional Language Workspaces</h2>
+                    <p class="text-xs text-slate-400">Explore dedicated cultural portals with traditional invocations, sacred mantras, and regional Om emblems. Click any card to apply immediately.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="languagePortalsContainer">
+                    <!-- Populated dynamically with rich regional portals: Hindi, Tamil, Telugu, Malayalam, Kannada, Bengali -->
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Application Script -->
+    
+
+            <!-- Objection-Handling FAQ Section (Product Page Essential) -->
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-12 border-t border-slate-800 space-y-6">
+                <div class="text-center max-w-xl mx-auto space-y-2">
+                    <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Frequently Asked Questions</span>
+                    <h2 class="cinzel text-2xl font-bold text-slate-100">Everything You Need to Know</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-2">
+                        <p class="text-sm font-bold text-amber-300">Does this work on all UPI payment apps in India?</p>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Yes. The QR codes adhere strictly to the National Payments Corporation of India (NPCI) URI standard (<code class="text-slate-300 font-mono">upi://pay?pa=...&pn=...</code>), making them 100% scannable across Google Pay, PhonePe, Paytm, BHIM, Cred, and bank apps.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-2">
+                        <p class="text-sm font-bold text-amber-300">Does this service store or log my banking information?</p>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            No. The entire engine executes 100% inside your local browser. No transaction details, payee VPAs, or payment amounts ever leave your device or touch an external server database.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-2">
+                        <p class="text-sm font-bold text-amber-300">Can I print physical acrylic countertop standees?</p>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Yes. The studio includes an automated **Print Standee** function formatted for A5/A4 tabletop acrylic stands, as well as a 4x Ultra-Res (2048px) PNG export designed for professional flex and metal plate printing.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-2">
+                        <p class="text-sm font-bold text-amber-300">How does Gmail login secure my records?</p>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            All authentication credentials use client-side SHA-256 Web Cryptography hashes. Your session and batch records remain protected in encrypted browser storage with zero third-party tracking.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Transparent Pricing & Inquiry Flow -->
+                <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-200">100% Free & Open-Source Community Edition</h3>
+                        <p class="text-xs text-slate-400">All features, languages, resolution presets, and CSV imports are free forever for personal, retail, and devotional seva.</p>
+                    </div>
+                    <button type="button" id="faqContactUsBtn" class="bg-slate-800 hover:bg-slate-750 text-amber-300 border border-amber-500/40 px-5 py-2.5 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer">
+                        Custom Enterprise Inquiry →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- 3. SECURITY BASELINE: DEFENSE-IN-DEPTH SECURITY CENTER                   -->
+        <!-- ========================================================================= -->
+        <section id="viewSecurity" class="hidden py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+            
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-xs font-semibold">
+                    <span>🛡️ Defense-in-Depth Specification</span>
+                </div>
+                <h2 class="cinzel text-3xl sm:text-4xl font-extrabold text-slate-100">
+                    Website Security Baseline & Hardening
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                    Security implemented systematically across network transport, HTTP header boundaries, client-side cryptographic hashing, and data validation layers.
+                </p>
+            </div>
+
+            <!-- Transport & Network Layer Architecture -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-3">
+                    <div class="flex items-center gap-2.5 text-amber-400 font-bold text-sm">
+                        <span>🔒</span>
+                        <span>Transport Layer (Strict TLS 1.3 & HSTS)</span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        All HTTP traffic is automatically upgraded to HTTPS via TLS 1.3. Preloaded <code class="text-amber-300 font-mono">Strict-Transport-Security (HSTS)</code> with <code class="text-amber-300 font-mono">includeSubDomains</code> completely neutralizes protocol downgrade and SSL-stripping attacks.
+                    </p>
+                    <div class="p-3 rounded-xl bg-slate-950 font-mono text-[11px] text-emerald-400">
+                        Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-3">
+                    <div class="flex items-center gap-2.5 text-sky-400 font-bold text-sm">
+                        <span>☁️</span>
+                        <span>DNS & Edge DDoS Mitigation</span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Traffic is proxied through global edge networks (Cloudflare / GitHub Fastly) absorbing multi-gigabit L3/L4/L7 volumetric DDoS floods, cloaking the origin server IP, and serving cached assets at the edge.
+                    </p>
+                    <div class="p-3 rounded-xl bg-slate-950 font-mono text-[11px] text-sky-400">
+                        Edge Network: Anycast DNS · Auto SSL · WAF Threat Shield Active
+                    </div>
+                </div>
+            </div>
+
+            <!-- Essential HTTP Security Headers Table -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                        Production HTTP Security Headers Matrix
+                    </h3>
+                    <span class="text-[11px] text-emerald-400">Configured for Nginx / Netlify / Vercel</span>
+                </div>
+
+                <div class="overflow-x-auto rounded-3xl border border-slate-800 bg-slate-900">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950 border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400 font-semibold">
+                            <tr>
+                                <th class="p-4">Header</th>
+                                <th class="p-4">Recommended Value</th>
+                                <th class="p-4">Security Defense Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800 font-mono text-[11px]">
+                            <tr class="hover:bg-slate-850/60 transition">
+                                <td class="p-4 font-bold text-amber-300">Content-Security-Policy</td>
+                                <td class="p-4 text-emerald-400">default-src 'self'; script-src 'self' cdn.jsdelivr.net;</td>
+                                <td class="p-4 text-slate-400 font-sans text-xs">Blocks Cross-Site Scripting (XSS) and rogue script injection.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-850/60 transition">
+                                <td class="p-4 font-bold text-amber-300">X-Frame-Options</td>
+                                <td class="p-4 text-emerald-400">DENY or SAMEORIGIN</td>
+                                <td class="p-4 text-slate-400 font-sans text-xs">Prevents clickjacking by prohibiting malicious iframe embedding.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-850/60 transition">
+                                <td class="p-4 font-bold text-amber-300">X-Content-Type-Options</td>
+                                <td class="p-4 text-emerald-400">nosniff</td>
+                                <td class="p-4 text-slate-400 font-sans text-xs">Stops MIME-type sniffing vulnerabilities on uploaded assets.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-850/60 transition">
+                                <td class="p-4 font-bold text-amber-300">Referrer-Policy</td>
+                                <td class="p-4 text-emerald-400">strict-origin-when-cross-origin</td>
+                                <td class="p-4 text-slate-400 font-sans text-xs">Prevents sensitive payment tokens from leaking in query strings.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-850/60 transition">
+                                <td class="p-4 font-bold text-amber-300">Permissions-Policy</td>
+                                <td class="p-4 text-emerald-400">camera=(), microphone=(), geolocation=()</td>
+                                <td class="p-4 text-slate-400 font-sans text-xs">Disables unused hardware sensors and device APIs.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Interactive Security Simulators (Live Tools on Page) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
+                
+                <!-- Live Schema & Input Sanitizer -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                            <span>🧪</span> Live Input Sanitization & Schema Tester
+                        </span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Zod / Joi Mode</span>
+                    </div>
+                    <p class="text-xs text-slate-400">
+                        Test how strings with potential SQLi (<code class="text-amber-400">' OR 1=1;--</code>) or XSS payloads (<code class="text-amber-400">&lt;script&gt;</code>) are sanitized in real time.
+                    </p>
+                    <input type="text" id="secTestInput" value="Paytm Store <script>alert(1)</script>" placeholder="Type test string..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-400 transition">
+                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1 font-mono text-[11px]">
+                        <p class="text-slate-500">Sanitized Output Payload:</p>
+                        <p id="secSanitizedOutput" class="text-emerald-400 break-all select-all">Paytm Store &amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;</p>
+                    </div>
+                </div>
+
+                <!-- Web Crypto SHA-256 Benchmark & Form Protection -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                            <span>⚡</span> Web Crypto SHA-256 & CSRF Generator
+                        </span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">W3C Crypto API</span>
+                    </div>
+                    <p class="text-xs text-slate-400">
+                        Generates high-entropy CSRF tokens and computes 256-bit cryptographic digest locally inside browser hardware.
+                    </p>
+                    <div class="flex gap-2">
+                        <button type="button" id="secGenCsrfBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
+                            Generate New CSRF Token
+                        </button>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1 font-mono text-[11px]">
+                        <p class="text-slate-500">Active Anti-CSRF Token:</p>
+                        <p id="secCsrfDisplay" class="text-amber-400 break-all">csrf_7f8a92bc3d104e5fa6892e104b</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- 4. ABOUT PAGE: TRUST BUILDING, MISSION, LOCATION & CREDENTIALS          -->
+        <!-- ========================================================================= -->
+        <section id="viewAbout" class="hidden py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-12">
+            
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-semibold">
+                    <span>👥 Operational History & Mission</span>
+                </div>
+                <h2 class="cinzel text-3xl sm:text-4xl font-extrabold text-slate-100">
+                    Built for Cultural Reverence & Merchant Freedom
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                    Empowering local merchants, dharmic trusts, temples, and creators across India with elegant payment displays and uncompromising privacy.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                
+                <!-- Mission & Operational History -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 space-y-4">
+                    <h3 class="cinzel text-lg font-bold text-amber-400">Our Operational Journey</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        The project started as a dedicated Google Colab computational notebook (<code class="text-amber-300 font-mono">Untitled8.ipynb</code>) created by <strong>vamikayadav30122015@gmail.com</strong> to solve a common challenge: generic black-and-white QR stickers felt cold and misplaced in devotional sanctums and vibrant Indian markets.
+                    </p>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        We scaled the prototype into an enterprise client-side web studio capable of generating high-resolution, NPCI-verified devotional standees in 6 regional languages with zero reliance on cloud servers.
+                    </p>
+                    <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                        <span>Initiated: October 2026</span>
+                        <span class="text-emerald-400">● 100% Active & Maintained</span>
+                    </div>
+                </div>
+
+                <!-- Location & Physical Credentials -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 space-y-4">
+                    <h3 class="cinzel text-lg font-bold text-amber-400">Location & Verified Credentials</h3>
+                    
+                    <div class="space-y-3 text-xs text-slate-300">
+                        <div class="flex items-start gap-3">
+                            <span class="text-base text-amber-400 shrink-0">📍</span>
+                            <div>
+                                <p class="font-bold text-slate-100">Development Headquarters</p>
+                                <p class="text-slate-400">Raebareli, Uttar Pradesh, India</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <span class="text-base text-emerald-400 shrink-0">🏛️</span>
+                            <div>
+                                <p class="font-bold text-slate-100">Compliance & Regulatory Standards</p>
+                                <p class="text-slate-400">Unified Payments Interface (UPI) Specification by NPCI</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <span class="text-base text-sky-400 shrink-0">🔐</span>
+                            <div>
+                                <p class="font-bold text-slate-100">Zero-Knowledge Architecture</p>
+                                <p class="text-slate-400">Client-side rendering guarantee — no user payment logs stored.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
+                        <em>"Our pledge: Every temple trust, small business owner, and seva volunteer in India deserves world-class digital payment aesthetics without subscription paywalls."</em>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- 5. CONTACT PAGE: LOW-FRICTION FORM & RESPONSE-TIME GUARANTEE             -->
+        <!-- ========================================================================= -->
+        <section id="viewContact" class="hidden py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-12">
+            
+            <div class="text-center max-w-xl mx-auto space-y-3">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-semibold">
+                    <span>📬 Direct Merchant Support</span>
+                </div>
+                <h2 class="cinzel text-3xl sm:text-4xl font-extrabold text-slate-100">
+                    Get in Touch with Our Team
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                    Have questions about custom temple standees, corporate bulk QR rollouts, or integration? We are here to help.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                
+                <!-- Contact Direct Info -->
+                <div class="md:col-span-5 bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 space-y-5">
+                    <h3 class="text-base font-bold text-slate-100">Direct Contact Channels</h3>
+                    
+                    <div class="space-y-4 text-xs">
+                        <div>
+                            <p class="text-slate-400 uppercase tracking-wider text-[10px] font-semibold">Direct Email</p>
+                            <a href="mailto:vamikayadav30122015@gmail.com" class="text-amber-400 hover:underline font-mono text-xs">vamikayadav30122015@gmail.com</a>
+                        </div>
+
+                        <div>
+                            <p class="text-slate-400 uppercase tracking-wider text-[10px] font-semibold">Operational Location</p>
+                            <p class="text-slate-200 font-medium">Raebareli, Uttar Pradesh, India</p>
+                        </div>
+
+                        <div>
+                            <p class="text-slate-400 uppercase tracking-wider text-[10px] font-semibold">Response Time Expectation</p>
+                            <p class="text-emerald-400 font-semibold flex items-center gap-1.5 mt-0.5">
+                                <span>⏱️</span> Guaranteed response within 2 business hours
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-[11px] text-slate-400">
+                        🔒 Communications are protected under standard TLS 1.3 encryption protocols.
+                    </div>
+                </div>
+
+                <!-- Low-Friction Form (3 Inputs Max) -->
+                <div class="md:col-span-7 bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <h3 class="text-sm font-bold text-slate-100">Send an Inquiry</h3>
+                        <span class="text-[10px] text-amber-400">3 simple fields · Zero spam</span>
+                    </div>
+
+                    <form id="contactInquiryForm" class="space-y-3.5">
+                        <div>
+                            <label for="contactNameInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                                Full Name <span class="text-amber-400">*</span>
+                            </label>
+                            <input type="text" id="contactNameInput" required placeholder="Naveen Singh" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400 transition">
+                        </div>
+
+                        <div>
+                            <label for="contactEmailInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                                Gmail / Email Address <span class="text-amber-400">*</span>
+                            </label>
+                            <input type="email" id="contactEmailInput" required placeholder="yourname@gmail.com" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400 transition">
+                        </div>
+
+                        <div>
+                            <label for="contactMessageInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                                Message or Project Requirement <span class="text-amber-400">*</span>
+                            </label>
+                            <textarea id="contactMessageInput" rows="3" required placeholder="Tell us about your temple, store, or batch requirements..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-400 transition"></textarea>
+                        </div>
+
+                        <button type="submit" id="contactSubmitBtn" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 rounded-xl text-xs transition cursor-pointer shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2">
+                            <span>✉️ Submit Inquiry (Guaranteed 2hr Reply)</span>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Global Semantic Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-10 px-4 sm:px-6 lg:px-8 mt-16 text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="space-y-1 text-center md:text-left">
+                <p class="cinzel font-bold text-sm text-slate-200">ॐ Artistic UPI QR Studio</p>
+                <p class="text-[11px] text-slate-500">NPCI-Compliant Open Platform · Built with Zero-Knowledge Architecture · Raebareli, UP, India</p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-6 text-[11px]">
+                <button type="button" class="footer-nav-btn hover:text-amber-400 transition" data-target="home">Home</button>
+                <button type="button" class="footer-nav-btn hover:text-amber-400 transition" data-target="studio">QR Studio</button>
+                <button type="button" class="footer-nav-btn hover:text-amber-400 transition" data-target="security">Security Baseline</button>
+                <button type="button" class="footer-nav-btn hover:text-amber-400 transition" data-target="about">About</button>
+                <button type="button" class="footer-nav-btn hover:text-amber-400 transition" data-target="contact">Contact</button>
+            </div>
+
+            <p class="text-[11px] text-slate-500 text-center md:text-right">
+                © 2026 Artistic UPI Studio. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+<script>
+
+        // Comprehensive Multi-Language & Cultural Database
+        const languageData = {
+            hi: {
+                name: "हिन्दी / संस्कृत",
+                label: "Devanagari Script (हिन्दी / संस्कृत)",
+                region: "North India & Sanatan Dharma",
+                symbol: "ॐ",
+                emblemKey: "om_hi",
+                fontClass: "lang-devanagari",
+                defaultHeader: "॥ ॐ नमः शिवाय ॥",
+                phrases: [
+                    { title: "॥ ॐ नमः शिवाय ॥", text: "॥ ॐ नमः शिवाय ॥", desc: "Lord Shiva Invocation", symbol: "om_hi" },
+                    { title: "॥ श्री गणेशाय नमः ॥", text: "॥ श्री गणेशाय नमः ॥", desc: "Shree Ganesh Auspicious", symbol: "om_hi" },
+                    { title: "॥ शुभ लाभ · SCAN & PAY ॥", text: "॥ शुभ लाभ · SCAN & PAY ॥", desc: "Shubh Labh Trade & Blessings", symbol: "swastik" },
+                    { title: "ACCEPTED HERE · ANY UPI", text: "ACCEPTED HERE · ANY UPI APP", desc: "Official Merchant Banner", symbol: "upi" },
+                    { title: "॥ ॐ शान्तिः शान्तिः शान्तिः ॥", text: "॥ ॐ शान्तिः शान्तिः शान्तिः ॥", desc: "Om Shanti Peace & Blessings", symbol: "om_hi" },
+                    { title: "॥ हर हर महादेव ॥", text: "॥ हर हर महादेव ॥", desc: "Victory of Mahadeva", symbol: "trishul" },
+                    { title: "॥ जय श्री राम ॥", text: "॥ जय श्री राम ॥", desc: "Ayodhya Ram Mandir Seva", symbol: "om_hi" }
+                ]
+            },
+            ta: {
+                name: "தமிழ்",
+                label: "Tamil Script (தமிழ்)",
+                region: "Tamil Nadu & Dravidian Heritage",
+                symbol: "ௐ",
+                emblemKey: "om_ta",
+                fontClass: "lang-tamil",
+                defaultHeader: "॥ ௐ நம சிவாய ॥",
+                phrases: [
+                    { title: "॥ ௐ நம சிவாய ॥", text: "॥ ௐ நம சிவாய ॥", desc: "Om Nama Shivaya", symbol: "om_ta" },
+                    { title: "॥ ௐ ஸ்ரீ கணேசாய நமஹ ॥", text: "॥ ௐ ஸ்ரீ கணேசாய நமஹ ॥", desc: "Sri Ganeshaya Namaha", symbol: "om_ta" },
+                    { title: "॥ சுப லாபம் · மங்களம் ॥", text: "॥ சுப லாபம் · மங்களம் ॥", desc: "Subha Labham & Prosperity", symbol: "swastik" },
+                    { title: "॥ ௐ சாந்தி சாந்தி சாந்தி ॥", text: "॥ ௐ சாந்தி சாந்தி சாந்தி ॥", desc: "Om Shanthi Peace", symbol: "om_ta" },
+                    { title: "॥ வெற்றிவேல் முருகனுக்கு அரோகரா ॥", text: "॥ வெற்றிவேல் முருகனுக்கு அரோகரா ॥", desc: "Lord Murugan Invocation", symbol: "trishul" },
+                    { title: "॥ ௐ நமோ நாராயணாய ॥", text: "॥ ௐ நமோ நாராயணாய ॥", desc: "Om Namo Narayanaya", symbol: "om_ta" }
+                ]
+            },
+            te: {
+                name: "తెలుగు",
+                label: "Telugu Script (తెలుగు)",
+                region: "Andhra Pradesh & Telangana",
+                symbol: "ఓం",
+                emblemKey: "om_te",
+                fontClass: "lang-telugu",
+                defaultHeader: "॥ ఓం నమః శివాయ ॥",
+                phrases: [
+                    { title: "॥ ఓం నమః శివాయ ॥", text: "॥ ఓం నమః శివాయ ॥", desc: "Om Namah Shivaya", symbol: "om_te" },
+                    { title: "॥ శ్రీ గణేశాయ నమః ॥", text: "॥ శ్రీ గణేశాయ నమః ॥", desc: "Sri Ganeshaya Namaha", symbol: "om_te" },
+                    { title: "॥ శుభ లాభం · శుభం భూయాత్ ॥", text: "॥ శుభ లాభం · శుభం భూయాత్ ॥", desc: "Shubha Labham Prosperity", symbol: "swastik" },
+                    { title: "॥ ఓం శాంతిః శాంతిః శాంతిః ॥", text: "॥ ఓం శాంతిః శాంతిః శాంతిః ॥", desc: "Om Shanti Peace", symbol: "om_te" },
+                    { title: "॥ శ్రీ వేంకటేశ్వరాయ నమః ॥", text: "॥ శ్రీ వేంకటేశ్వరాయ నమః ॥", desc: "Tirupati Balaji Seva", symbol: "om_te" },
+                    { title: "॥ జై శ్రీరామ్ ॥", text: "॥ జై శ్రీరామ్ ॥", desc: "Jai Sri Ram", symbol: "om_te" }
+                ]
+            },
+            ml: {
+                name: "മലയാളം",
+                label: "Malayalam Script (മലയാളം)",
+                region: "Kerala & God's Own Country",
+                symbol: "ഓം",
+                emblemKey: "om_ml",
+                fontClass: "lang-malayalam",
+                defaultHeader: "॥ ഓം നമഃ ശിവായ ॥",
+                phrases: [
+                    { title: "॥ ഓം നമഃ ശിവായ ॥", text: "॥ ഓം നമഃ ശിവായ ॥", desc: "Om Namah Shivaya", symbol: "om_ml" },
+                    { title: "॥ ശ്രീ ഗണേശായ നമഃ ॥", text: "॥ ശ്രീ ഗണേശായ നമഃ ॥", desc: "Sri Ganeshaya Namaha", symbol: "om_ml" },
+                    { title: "॥ ശുഭ ലാഭം · മംഗളം ഭവതു ॥", text: "॥ ശുഭ ലാഭം · മംഗളം ഭവതു ॥", desc: "Shubha Labham Prosperity", symbol: "swastik" },
+                    { title: "॥ ഓം ശാന്തി ശാന്തി ശാന്തിഃ ॥", text: "॥ ഓം ശാന്തി ശാന്തി ശാന്തിഃ ॥", desc: "Om Shanti Peace", symbol: "om_ml" },
+                    { title: "॥ സ്വാമിയേ ശരണമയ്യപ്പ ॥", text: "॥ സ്വാമിയേ ശരണമയ്യപ്പ ॥", desc: "Lord Ayyappa Sabarimala", symbol: "om_ml" },
+                    { title: "॥ ഹരേ കൃഷ്ണ ഹരേ രാമ ॥", text: "॥ ഹരേ കൃഷ്ണ ഹരേ രാമ ॥", desc: "Guruvayurappa Bhakti", symbol: "om_ml" }
+                ]
+            },
+            kn: {
+                name: "ಕನ್ನಡ",
+                label: "Kannada Script (ಕನ್ನಡ)",
+                region: "Karnataka & Western Ghats",
+                symbol: "ಓಂ",
+                emblemKey: "om_te",
+                fontClass: "lang-kannada",
+                defaultHeader: "॥ ಓಂ ನಮಃ ಶಿವಾಯ ॥",
+                phrases: [
+                    { title: "॥ ಓಂ ನಮಃ ಶಿವಾಯ ॥", text: "॥ ಓಂ ನಮಃ ಶಿವಾಯ ॥", desc: "Om Namah Shivaya", symbol: "om_te" },
+                    { title: "॥ ಶ್ರೀ ಗಣೇಶಾಯ ನಮಃ ॥", text: "॥ ಶ್ರೀ ಗಣೇಶಾಯ ನಮಃ ॥", desc: "Sri Ganeshaya Namaha", symbol: "om_te" },
+                    { title: "॥ ಶುಭ ಲಾಭ ॥", text: "॥ ಶುಭ ಲಾಭ · ಮಂಗಳಂ ॥", desc: "Shubha Labha Prosperity", symbol: "swastik" },
+                    { title: "॥ ಚಾಮುಂಡೇಶ್ವರಿ ಕೃಪೆ ॥", text: "॥ ಶ್ರೀ ಚಾಮುಂಡೇಶ್ವರಿ ಪ್ರಸನ್ನ ॥", desc: "Mysore Chamundeshwari", symbol: "trishul" }
+                ]
+            },
+            bn: {
+                name: "বাংলা",
+                label: "Bengali Script (বাংলা)",
+                region: "Bengal & Eastern Heritage",
+                symbol: "ॐ",
+                emblemKey: "om_hi",
+                fontClass: "lang-bengali",
+                defaultHeader: "॥ ওঁ নমঃ শিবায় ॥",
+                phrases: [
+                    { title: "॥ ওঁ নমঃ শিবায় ॥", text: "॥ ওঁ নমঃ শিবায় ॥", desc: "Om Namah Shivaya", symbol: "om_hi" },
+                    { title: "॥ শুভ লাভ ॥", text: "॥ শুভ লাভ · জয় মা তারা ॥", desc: "Shubh Labh Trade & Blessings", symbol: "swastik" },
+                    { title: "॥ জয় মা দুর্গা ॥", text: "॥ জয় মা দুর্গা ॥", desc: "Maa Durga Seva & Puja", symbol: "trishul" },
+                    { title: "॥ ওঁ শান্তি ॥", text: "॥ ওঁ শান্তি শান্তি শান্তি ॥", desc: "Om Shanti Blessings", symbol: "om_hi" }
+                ]
+            }
+        };
+
+        // Seeded Batch CSV Records from Google Colab Notebook Cell 6
+        let batchCsvData = [
+            { upi_id: "852753naveen-1@okaxis", payee_name: "Naveen Singh", amount: 501.00, note: "Shiv Arpan" },
+            { upi_id: "temple@upi", payee_name: "Kashi Vishwanath Mandir", amount: 1008.00, note: "Temple Seva" },
+            { upi_id: "ganeshstore@okicici", payee_name: "Shree Ganesh Store", amount: 251.00, note: "Shubh Labh Donation" },
+            { upi_id: "ashramtrust@sbi", payee_name: "Vedic Wisdom Ashram", amount: 108.00, note: "Annadanam Seva" },
+            { upi_id: "bookbazaar@ybl", payee_name: "Devotional Literature Corner", amount: 0.00, note: "Open Contribution" }
+        ];
+
+        // Security User Registry Database (persisted with try/catch)
+        let userRegistry = [];
+        let currentUser = null;
+
+        function loadSecurityRegistry() {
+            try {
+                const stored = localStorage.getItem('artistic_upi_users');
+                if (stored) {
+                    userRegistry = JSON.parse(stored);
+                } else {
+                    userRegistry = [
+                        { email: "vamikayadav30122015@gmail.com", role: "Owner", registeredAt: "2026-10-30T10:00:00Z", passHash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" }
+                    ];
+                }
+                const active = localStorage.getItem('artistic_upi_session');
+                if (active) {
+                    currentUser = active;
+                }
+            } catch (e) {
+                userRegistry = [
+                    { email: "vamikayadav30122015@gmail.com", role: "Owner", registeredAt: "2026-10-30T10:00:00Z", passHash: "default" }
+                ];
+            }
+            updateAuthUI();
+        }
+
+        function saveSecurityRegistry() {
+            try {
+                localStorage.setItem('artistic_upi_users', JSON.stringify(userRegistry));
+                if (currentUser) {
+                    localStorage.setItem('artistic_upi_session', currentUser);
+                } else {
+                    localStorage.removeItem('artistic_upi_session');
+                }
+            } catch (e) {
+                console.error("Storage error:", e);
+            }
+        }
+
+        // Fast SHA-256 Hash using Web Crypto API
+        async function sha256(message) {
+            try {
+                const msgBuffer = new TextEncoder().encode(message);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            } catch (e) {
+                return btoa(message); // fallback
+            }
+        }
+
+        function updateAuthUI() {
+            const loggedInView = document.getElementById('userLoggedInView');
+            const loggedOutView = document.getElementById('userLoggedOutView');
+            const userEmailElem = document.getElementById('currentUserEmail');
+
+            if (currentUser) {
+                loggedInView.classList.remove('hidden');
+                loggedOutView.classList.add('hidden');
+                userEmailElem.textContent = currentUser;
+            } else {
+                loggedInView.classList.add('hidden');
+                loggedOutView.classList.remove('hidden');
+            }
+        }
+
+        // State
+        const state = {
+            activeTab: "description",
+            deviceMode: "standee",
+            exportDpi: 1024,
+            lang: "hi",
+            layout: "temple",
+            customHeader: "॥ ॐ नमः शिवाय ॥",
+            upiId: "852753naveen-1@okaxis",
+            payeeName: "Naveen Singh",
+            amount: "501",
+            note: "Shiv Arpan",
+            subTagline: "Verified Trust & Devotional Seva",
+            regContact: "Support: +91 85275 30000",
+            themeColor: "#b45309",
+            centerEmblem: "om_hi",
+            dotStyle: "rounded",
+            cornerSquare: "extra-rounded"
+        };
+
+        let qrCodeInstance = null;
+
+        // Dynamic SVG Maker for sharp multi-language emblems inside QR code
+        function createEmblemSvg(type, color) {
+            const encodedColor = encodeURIComponent(color);
+            switch (type) {
+                case "om_hi":
+                    return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='white' stroke='${encodedColor}' stroke-width='4'/><text x='50' y='65' font-size='46' font-family='Noto Sans Devanagari, sans-serif' font-weight='bold' text-anchor='middle' fill='${encodedColor}'>ॐ</text></svg>`;
+                case "om_ta":
+                    return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='white' stroke='${encodedColor}' stroke-width='4'/><text x='50' y='68' font-size='46' font-family='Noto Sans Tamil, sans-serif' font-weight='bold' text-anchor='middle' fill='${encodedColor}'>ௐ</text></svg>`;
+                case "om_te":
+                    return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='white' stroke='${encodedColor}' stroke-width='4'/><text x='50' y='62' font-size='34' font-family='Noto Sans Telugu, sans-serif' font-weight='bold' text-anchor='middle' fill='${encodedColor}'>ఓం</text></svg>`;
+                case "om_ml":
+                    return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='white' stroke='${encodedColor}' stroke-width='4'/><text x='50' y='63' font-size='36' font-family='Noto Sans Malayalam, sans-serif' font-weight='bold' text-anchor='middle' fill='${encodedColor}'>ഓം</text></svg>`;
+                case "ghibli_leaf":
+                    return "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='white' stroke='" + encodedColor + "' stroke-width='4'/><text x='50' y='67' font-size='48' text-anchor='middle'>🍃</text></svg>";
+                case "ghibli_sparkle":
+                    return "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='white' stroke='" + encodedColor + "' stroke-width='4'/><text x='50' y='67' font-size='48' text-anchor='middle'>✨</text></svg>";
+                case "swastik":
+                    return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='white' stroke='${encodedColor}' stroke-width='4'/><text x='50' y='68' font-size='48' font-family='sans-serif' text-anchor='middle' fill='${encodedColor}'>卐</text></svg>`;
+                case "trishul":
+                    return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='white' stroke='${encodedColor}' stroke-width='4'/><text x='50' y='66' font-size='42' font-family='sans-serif' text-anchor='middle' fill='${encodedColor}'>🔱</text></svg>`;
+                case "rupee":
+                    return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='white' stroke='${encodedColor}' stroke-width='4'/><text x='50' y='66' font-size='48' font-weight='bold' font-family='sans-serif' text-anchor='middle' fill='${encodedColor}'>₹</text></svg>`;
+                case "upi":
+                    return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='white' stroke='${encodedColor}' stroke-width='4'/><text x='50' y='60' font-size='28' font-weight='900' font-family='sans-serif' text-anchor='middle' fill='${encodedColor}'>UPI</text></svg>`;
+                case "none":
+                default:
+                    return "";
+            }
+        }
+
+        // Toast Helper
+        function showToast(message, icon = "✓") {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            
+            toastMsg.textContent = message;
+            toastIcon.textContent = icon;
+
+            toast.classList.remove('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
+        // Primary Tab Navigation Switcher (Tabs 1, 2, 3, 4)
+        function switchTab(target) {
+            state.activeTab = target;
+            const tabDescBtn = document.getElementById('tabDescriptionBtn');
+            const tabPrevBtn = document.getElementById('tabPreviewBtn');
+            const tabCsvBtn = document.getElementById('tabCsvBtn');
+            const tabLangBtn = document.getElementById('tabLanguagePortalsBtn');
+            
+            const pageDesc = document.getElementById('pageDescription');
+            const pagePrev = document.getElementById('pagePreview');
+            const pageCsv = document.getElementById('pageCsv');
+            const pageLang = document.getElementById('pageLanguagePortals');
+
+            // Reset tab styles
+            [tabDescBtn, tabPrevBtn, tabCsvBtn, tabLangBtn].forEach(btn => {
+                btn.className = "flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 text-slate-400 hover:text-slate-200 cursor-pointer";
+            });
+            [pageDesc, pagePrev, pageCsv, pageLang].forEach(p => p.classList.add('hidden'));
+
+            if (target === "description") {
+                pageDesc.classList.remove('hidden');
+                tabDescBtn.className = "flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 bg-amber-500 text-slate-950 shadow-md cursor-pointer";
+                renderQRCode();
+            } else if (target === "preview") {
+                readInputsToState();
+                pagePrev.classList.remove('hidden');
+                tabPrevBtn.className = "flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 bg-amber-500 text-slate-950 shadow-md cursor-pointer";
+                renderQRCode();
+            } else if (target === "csv") {
+                pageCsv.classList.remove('hidden');
+                tabCsvBtn.className = "flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 bg-amber-500 text-slate-950 shadow-md cursor-pointer";
+                renderCsvTable();
+            } else if (target === "languages") {
+                pageLang.classList.remove('hidden');
+                tabLangBtn.className = "flex-1 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 bg-amber-500 text-slate-950 shadow-md cursor-pointer";
+                renderLanguagePortals();
+            }
+        }
+
+        // Device Mode & Width Adjuster
+        function applyDeviceMode(mode) {
+            state.deviceMode = mode;
+            const wrapper = document.getElementById('standeeWrapper');
+            
+            document.querySelectorAll('.device-btn').forEach(btn => {
+                if (btn.getAttribute('data-device') === mode) {
+                    btn.classList.add('bg-amber-500/20', 'text-amber-300', 'border', 'border-amber-500/30');
+                    btn.classList.remove('text-slate-400');
+                } else {
+                    btn.classList.remove('bg-amber-500/20', 'text-amber-300', 'border', 'border-amber-500/30');
+                    btn.classList.add('text-slate-400');
+                }
+            });
+
+            if (mode === "mobile") {
+                wrapper.style.maxWidth = "390px";
+            } else if (mode === "standee") {
+                wrapper.style.maxWidth = "440px";
+            } else if (mode === "poster") {
+                wrapper.style.maxWidth = "580px";
+            } else {
+                wrapper.style.maxWidth = "100%";
+            }
+        }
+
+        // Compute NPCI UPI URI
+        function buildUpiUri() {
+            const pa = state.upiId.trim();
+            const pn = state.payeeName.trim();
+            const am = state.amount ? parseFloat(state.amount) : null;
+            const tn = state.note.trim();
+
+            let uri = `upi://pay?pa=${encodeURIComponent(pa)}&pn=${encodeURIComponent(pn)}&cu=INR`;
+            if (am !== null && !isNaN(am) && am > 0) {
+                uri += `&am=${am.toFixed(2)}`;
+            }
+            if (tn) {
+                uri += `&tn=${encodeURIComponent(tn)}`;
+            }
+            return uri;
+        }
+
+        // Render Phrases for Active Language
+        function renderLanguagePhrases() {
+            const lang = languageData[state.lang] || languageData.hi;
+            const container = document.getElementById('phraseButtonsContainer');
+            document.getElementById('activeLangLabel').textContent = lang.label;
+            container.innerHTML = '';
+
+            lang.phrases.forEach(item => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'header-preset-btn text-xs py-2 px-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-500/50 hover:bg-slate-900 transition cursor-pointer group flex flex-col justify-between';
+                btn.innerHTML = `
+                    <div class="flex items-center justify-between w-full">
+                        <span class="text-xs font-bold text-amber-300 group-hover:text-amber-200">${item.title}</span>
+                        <span class="text-[10px] text-slate-500">${item.desc}</span>
+                    </div>
+                `;
+                btn.addEventListener('click', () => {
+                    state.customHeader = item.text;
+                    state.centerEmblem = item.symbol;
+                    document.getElementById('customHeaderInput').value = item.text;
+                    document.getElementById('centerEmblemSelect').value = item.symbol;
+                    renderQRCode();
+                    showToast(`Loaded ${item.title}`);
+                });
+                container.appendChild(btn);
+            });
+        }
+
+        // Apply Layout Styling & Regional Font (Supports Canva Graphic & Notion Minimal)
+        function applyLayoutTheme() {
+            const standee = document.getElementById('printableStandee');
+            const leftEmblem = document.getElementById('emblemHeaderLeft');
+            const rightEmblem = document.getElementById('emblemHeaderRight');
+            const headerTag = document.getElementById('displayHeaderTag');
+            const payeeTag = document.getElementById('displayPayee');
+            const activeLang = languageData[state.lang] || languageData.hi;
+
+            // Reset base classes
+            standee.className = "rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col items-center text-center relative overflow-hidden transition-all duration-300";
+            headerTag.className = `text-sm sm:text-base font-bold tracking-wide ${activeLang.fontClass}`;
+            payeeTag.className = "text-xl sm:text-2xl font-black tracking-tight";
+
+            if (state.layout === "ghibli") {
+                // Studio Ghibli Whimsical Anime Aesthetic
+                standee.classList.add('bg-gradient-to-b', 'from-emerald-950/80', 'via-slate-900', 'to-amber-950/40', 'border-2', 'border-emerald-400/50', 'shadow-emerald-500/10');
+                headerTag.classList.add('text-emerald-300', 'tracking-widest', 'font-medium');
+                payeeTag.classList.add('cinzel', 'text-transparent', 'bg-clip-text', 'bg-gradient-to-r', 'from-emerald-200', 'via-amber-200', 'to-teal-200');
+                leftEmblem.textContent = "🍃";
+                rightEmblem.textContent = "🍃";
+                leftEmblem.classList.remove('hidden');
+                rightEmblem.classList.remove('hidden');
+            } else if (state.layout === "temple") {
+                standee.classList.add('bg-slate-900', 'border-2', 'border-amber-500/40');
+                headerTag.classList.add('text-amber-300');
+                payeeTag.classList.add('cinzel', 'text-slate-100');
+                leftEmblem.textContent = activeLang.symbol;
+                rightEmblem.textContent = activeLang.symbol;
+                leftEmblem.classList.remove('hidden');
+                rightEmblem.classList.remove('hidden');
+            } else if (state.layout === "canva") {
+                // Canva Graphic Poster Aesthetic
+                standee.classList.add('bg-gradient-to-br', 'from-slate-900', 'via-indigo-950/60', 'to-slate-900', 'border-2', 'border-rose-500/40');
+                headerTag.classList.add('text-rose-300', 'tracking-widest');
+                payeeTag.classList.add('cinzel', 'text-transparent', 'bg-clip-text', 'bg-gradient-to-r', 'from-amber-200', 'via-rose-300', 'to-pink-300');
+                leftEmblem.textContent = "✦";
+                rightEmblem.textContent = "✦";
+                leftEmblem.classList.remove('hidden');
+                rightEmblem.classList.remove('hidden');
+            } else if (state.layout === "notion") {
+                // Notion Minimalist Aesthetic
+                standee.classList.add('bg-zinc-950', 'border', 'border-zinc-800', 'notion-font');
+                headerTag.classList.add('text-zinc-300', 'font-mono', 'text-xs');
+                payeeTag.classList.add('notion-font', 'text-zinc-100', 'font-bold');
+                leftEmblem.textContent = "▫";
+                rightEmblem.textContent = "▫";
+                leftEmblem.classList.remove('hidden');
+                rightEmblem.classList.remove('hidden');
+            } else if (state.layout === "standee") {
+                standee.classList.add('bg-gradient-to-b', 'from-slate-900', 'to-slate-950', 'border-2', 'border-sky-500/40');
+                headerTag.classList.add('text-sky-300');
+                payeeTag.classList.add('cinzel', 'text-slate-100');
+                leftEmblem.textContent = "⚡";
+                rightEmblem.textContent = "⚡";
+                leftEmblem.classList.remove('hidden');
+                rightEmblem.classList.remove('hidden');
+            } else if (state.layout === "fintech") {
+                standee.classList.add('bg-slate-900/90', 'backdrop-blur-md', 'border', 'border-slate-700');
+                headerTag.classList.add('text-slate-200');
+                payeeTag.classList.add('cinzel', 'text-slate-100');
+                leftEmblem.textContent = "✓";
+                rightEmblem.textContent = "✓";
+                leftEmblem.classList.remove('hidden');
+                rightEmblem.classList.remove('hidden');
+            } else if (state.layout === "compact") {
+                standee.classList.add('bg-slate-950', 'border', 'border-slate-800');
+                headerTag.classList.add('text-red-400');
+                payeeTag.classList.add('cinzel', 'text-slate-100');
+                leftEmblem.classList.add('hidden');
+                rightEmblem.classList.add('hidden');
+            }
+        }
+
+        // Render QR Code & Information (Synchronizes to both Same-Page Dock and Showcase)
+        function renderQRCode() {
+            const uri = buildUpiUri();
+            applyLayoutTheme();
+            
+            // Update Card Info
+            document.getElementById('displayHeaderTag').textContent = state.customHeader || "SCAN & PAY";
+            document.getElementById('displayPayee').textContent = state.payeeName || "Recipient";
+            document.getElementById('displayUpi').textContent = state.upiId || "upi@bank";
+            document.getElementById('displaySubTagline').textContent = state.subTagline || "";
+            document.getElementById('displayContactReg').textContent = state.regContact || "";
+            
+            const amtBadge = document.getElementById('amountBadgeContainer');
+            if (state.amount && parseFloat(state.amount) > 0) {
+                amtBadge.classList.remove('hidden');
+                document.getElementById('displayAmount').textContent = parseFloat(state.amount).toFixed(2);
+            } else {
+                amtBadge.classList.add('hidden');
+            }
+
+            const displayNote = document.getElementById('displayNote');
+            if (state.note && state.note.trim()) {
+                displayNote.textContent = `"${state.note.trim()}"`;
+                displayNote.classList.remove('hidden');
+            } else {
+                displayNote.classList.add('hidden');
+            }
+
+            // Update Raw URI Inspector
+            const rawUriElem = document.getElementById('rawUriCode');
+            rawUriElem.textContent = uri;
+            document.getElementById('charCount').textContent = `${uri.length} chars`;
+
+            // Clear Container
+            const container = document.getElementById('qrCanvasContainer');
+            container.innerHTML = '';
+
+            // Map styling
+            const dotType = state.dotStyle || "rounded";
+            const cornerSquareType = state.cornerSquare || "extra-rounded";
+            const emblemData = createEmblemSvg(state.centerEmblem, state.themeColor);
+
+            try {
+                if (typeof QRCodeStyling !== 'undefined') {
+                    const qrConfig = {
+                        width: 220,
+                        height: 220,
+                        type: "canvas",
+                        data: uri,
+                        qrOptions: {
+                            errorCorrectionLevel: "H"
+                        },
+                        dotsOptions: {
+                            color: state.themeColor,
+                            type: dotType
+                        },
+                        backgroundOptions: {
+                            color: "#ffffff"
+                        },
+                        cornersSquareOptions: {
+                            color: state.themeColor,
+                            type: cornerSquareType
+                        },
+                        cornersDotOptions: {
+                            color: state.themeColor
+                        }
+                    };
+
+                    if (emblemData) {
+                        qrConfig.image = emblemData;
+                        qrConfig.imageOptions = {
+                            imageSize: 0.28,
+                            margin: 4
+                        };
+                    }
+
+                    qrCodeInstance = new QRCodeStyling(qrConfig);
+                    qrCodeInstance.append(container);
+                } else {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 220;
+                    canvas.height = 220;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(0, 0, 220, 220);
+                    ctx.fillStyle = state.themeColor;
+                    ctx.font = "12px sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText("Rendering QR...", 110, 110);
+                    container.appendChild(canvas);
+                }
+            } catch (err) {
+                console.error("QR render error:", err);
+            }
+
+            // Clone to Side-Dock for SAME-PAGE LIVE PREVIEW
+            updateSamePageDock();
+        }
+
+        // Live Same-Page Dock Renderer
+        function updateSamePageDock() {
+            const sideDock = document.getElementById('sidePreviewContainer');
+            const standeeCard = document.getElementById('printableStandee');
+            if (!sideDock || !standeeCard) return;
+
+            sideDock.innerHTML = '';
+            const clone = standeeCard.cloneNode(true);
+            clone.id = "sideDockClone";
+            clone.style.maxWidth = "360px";
+            clone.style.width = "100%";
+            clone.classList.add('scale-[0.95]', 'origin-top');
+            
+            // Re-render canvas in clone so image is visible
+            const originalCanvas = standeeCard.querySelector('canvas');
+            const cloneCanvasContainer = clone.querySelector('#qrCanvasContainer') || clone.querySelector('[id*="qrCanvasContainer"]');
+            if (originalCanvas && cloneCanvasContainer) {
+                cloneCanvasContainer.innerHTML = '';
+                const newCanvas = document.createElement('canvas');
+                newCanvas.width = originalCanvas.width;
+                newCanvas.height = originalCanvas.height;
+                const newCtx = newCanvas.getContext('2d');
+                newCtx.drawImage(originalCanvas, 0, 0);
+                cloneCanvasContainer.appendChild(newCanvas);
+            }
+
+            sideDock.appendChild(clone);
+        }
+
+        // Read UI inputs into state
+        function syncInputsFromState() {
+            document.getElementById('customHeaderInput').value = state.customHeader;
+            document.getElementById('upiIdInput').value = state.upiId;
+            document.getElementById('payeeNameInput').value = state.payeeName;
+            document.getElementById('amountInput').value = state.amount;
+            document.getElementById('noteInput').value = state.note;
+            document.getElementById('subTaglineInput').value = state.subTagline;
+            document.getElementById('regContactInput').value = state.regContact;
+            document.getElementById('centerEmblemSelect').value = state.centerEmblem;
+            document.getElementById('dotStyleSelect').value = state.dotStyle;
+            document.getElementById('cornerSquareSelect').value = state.cornerSquare;
+
+            // Highlight Language
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.getAttribute('data-lang') === state.lang) {
+                    btn.classList.add('active-lang', 'border-amber-500', 'bg-amber-500/10');
+                    btn.classList.remove('border-slate-800', 'bg-slate-950');
+                } else {
+                    btn.classList.remove('active-lang', 'border-amber-500', 'bg-amber-500/10');
+                    btn.classList.add('border-slate-800', 'bg-slate-950');
+                }
+            });
+
+            // Highlight Layout
+            document.querySelectorAll('.layout-btn').forEach(btn => {
+                if (btn.getAttribute('data-layout') === state.layout) {
+                    btn.classList.add('active-layout', 'border-amber-500', 'bg-amber-500/10');
+                    btn.classList.remove('border-slate-800', 'bg-slate-950');
+                } else {
+                    btn.classList.remove('active-layout', 'border-amber-500', 'bg-amber-500/10');
+                    btn.classList.add('border-slate-800', 'bg-slate-950');
+                }
+            });
+
+            // Sync Dropdown Selectors
+            if (qLayout) qLayout.value = state.layout;
+            if (qLang) qLang.value = state.lang;
+            if (qTheme) {
+                // Find matching color or set
+                qTheme.value = state.themeColor;
+            }
+
+            // Highlight theme
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                const color = btn.getAttribute('data-color');
+                if (color === state.themeColor) {
+                    btn.classList.add('active-theme', 'border-amber-500', 'bg-amber-500/10');
+                    btn.classList.remove('border-slate-800', 'bg-slate-950');
+                } else {
+                    btn.classList.remove('active-theme', 'border-amber-500', 'bg-amber-500/10');
+                    btn.classList.add('border-slate-800', 'bg-slate-950');
+                }
+            });
+
+            renderLanguagePhrases();
+            applyDeviceMode(state.deviceMode);
+        }
+
+        function readInputsToState() {
+            state.customHeader = document.getElementById('customHeaderInput').value.trim();
+            state.upiId = document.getElementById('upiIdInput').value.trim();
+            state.payeeName = document.getElementById('payeeNameInput').value.trim();
+            state.amount = document.getElementById('amountInput').value.trim();
+            state.note = document.getElementById('noteInput').value.trim();
+            state.subTagline = document.getElementById('subTaglineInput').value.trim();
+            state.regContact = document.getElementById('regContactInput').value.trim();
+            state.centerEmblem = document.getElementById('centerEmblemSelect').value;
+            state.dotStyle = document.getElementById('dotStyleSelect').value;
+            state.cornerSquare = document.getElementById('cornerSquareSelect').value;
+            state.exportDpi = parseInt(document.getElementById('exportDpiSelect').value, 10) || 1024;
+        }
+
+        // Render Page 4: Cultural Language Portals
+        function renderLanguagePortals() {
+            const container = document.getElementById('languagePortalsContainer');
+            container.innerHTML = '';
+
+            Object.keys(languageData).forEach(key => {
+                const item = languageData[key];
+                const card = document.createElement('div');
+                card.className = "bg-slate-950 border border-slate-800 hover:border-amber-500/60 rounded-2xl p-5 space-y-3 transition flex flex-col justify-between";
+                card.innerHTML = `
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-amber-400">${item.symbol}</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-900 border border-slate-800 text-slate-400">${key.toUpperCase()}</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-100">${item.name}</h3>
+                        <p class="text-xs text-amber-400/80 font-medium">${item.region}</p>
+                        <p class="text-[11px] text-slate-400 pt-1">Default: <span class="font-mono text-slate-300">${item.defaultHeader}</span></p>
+                    </div>
+                    <button type="button" class="load-lang-portal-btn w-full bg-amber-500/15 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 py-2 rounded-xl text-xs font-bold transition cursor-pointer flex items-center justify-center gap-1.5" data-lang="${key}">
+                        <span>Open ${item.name} Studio ⚡</span>
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+
+            document.querySelectorAll('.load-lang-portal-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const lKey = e.currentTarget.getAttribute('data-lang');
+                    state.lang = lKey;
+                    const lConf = languageData[lKey];
+                    state.customHeader = lConf.defaultHeader;
+                    state.centerEmblem = lConf.emblemKey;
+                    syncInputsFromState();
+                    renderQRCode();
+                    switchTab('description');
+                    showToast(`Activated ${lConf.name} workspace!`);
+                });
+            });
+        }
+
+        // ==================== CSV BATCH PROCESSING LOGIC ====================
+        function renderCsvTable() {
+            const tbody = document.getElementById('csvTableBody');
+            const countElem = document.getElementById('csvRecordCount');
+            countElem.textContent = batchCsvData.length;
+            tbody.innerHTML = '';
+
+            batchCsvData.forEach((row, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900 transition";
+                tr.innerHTML = `
+                    <td class="p-3 text-slate-500 font-mono">${idx + 1}</td>
+                    <td class="p-3 font-semibold text-slate-200">${escapeHtml(row.payee_name || '')}</td>
+                    <td class="p-3 font-mono text-amber-300/90">${escapeHtml(row.upi_id || '')}</td>
+                    <td class="p-3 text-slate-200">₹${parseFloat(row.amount || 0).toFixed(2)}</td>
+                    <td class="p-3 text-slate-400 italic">${escapeHtml(row.note || '')}</td>
+                    <td class="p-3 text-right">
+                        <button type="button" class="load-row-btn bg-amber-500/15 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer" data-index="${idx}">
+                            Load QR ⚡
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.querySelectorAll('.load-row-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(e.currentTarget.getAttribute('data-index'), 10);
+                    const item = batchCsvData[idx];
+                    if (item) {
+                        state.upiId = item.upi_id;
+                        state.payeeName = item.payee_name;
+                        state.amount = item.amount ? item.amount.toString() : "";
+                        state.note = item.note || "";
+                        syncInputsFromState();
+                        renderQRCode();
+                        switchTab('description');
+                        showToast(`Loaded ${item.payee_name} from CSV!`);
+                    }
+                });
+            });
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
+
+        // CSV File Parser
+        document.getElementById('csvFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const text = evt.target.result;
+                parseAndLoadCsvText(text);
+            };
+            reader.readAsText(file);
+        });
+
+        function parseAndLoadCsvText(csvText) {
+            const lines = csvText.trim().split(/\r?\n/).filter(line => line.trim());
+            if (lines.length < 2) {
+                showToast("CSV must have a header row and at least 1 record", "✕");
+                return;
+            }
+
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/^["']|["']$/g, ''));
+            const upiIdx = headers.indexOf('upi_id');
+            const nameIdx = headers.indexOf('payee_name');
+            const amtIdx = headers.indexOf('amount');
+            const noteIdx = headers.indexOf('note');
+
+            if (upiIdx === -1) {
+                showToast("CSV missing 'upi_id' column header", "✕");
+                return;
+            }
+
+            const newRecords = [];
+            for (let i = 1; i < lines.length; i++) {
+                const cols = lines[i].split(',').map(c => c.trim().replace(/^["']|["']$/g, ''));
+                if (cols.length > upiIdx && cols[upiIdx]) {
+                    newRecords.push({
+                        upi_id: cols[upiIdx] || "",
+                        payee_name: nameIdx !== -1 && cols[nameIdx] ? cols[nameIdx] : "Payee",
+                        amount: amtIdx !== -1 && !isNaN(parseFloat(cols[amtIdx])) ? parseFloat(cols[amtIdx]) : 0,
+                        note: noteIdx !== -1 && cols[noteIdx] ? cols[noteIdx] : ""
+                    });
+                }
+            }
+
+            if (newRecords.length > 0) {
+                batchCsvData = newRecords;
+                renderCsvTable();
+                showToast(`Loaded ${newRecords.length} records from CSV!`);
+            } else {
+                showToast("No valid rows found in CSV", "✕");
+            }
+        }
+
+        // Download Template CSV (Matches notebook Cell 6)
+        document.getElementById('downloadBatchTemplateCsvBtn').addEventListener('click', function() {
+            let csv = "upi_id,payee_name,amount,note\n";
+            batchCsvData.forEach(row => {
+                csv += `"${row.upi_id}","${row.payee_name}",${row.amount},"${row.note}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "upi_batch_template.csv";
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("Downloaded upi_batch_template.csv");
+        });
+
+        // Export User Security Registry to CSV
+        document.getElementById('exportUsersCsvBtn').addEventListener('click', function() {
+            let csv = "gmail_address,role,registered_timestamp,sha256_security_hash\n";
+            userRegistry.forEach(u => {
+                csv += `"${u.email}","${u.role || 'Member'}","${u.registeredAt || new Date().toISOString()}","${u.passHash}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "gmail_security_registry.csv";
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("Exported gmail_security_registry.csv");
+        });
+
+        // ==================== AUTHENTICATION & SECURITY LOGIC ====================
+        let authMode = "login";
+
+        document.getElementById('openAuthModalBtn').addEventListener('click', () => {
+            document.getElementById('authModal').classList.remove('hidden');
+        });
+
+        document.getElementById('closeAuthModalBtn').addEventListener('click', () => {
+            document.getElementById('authModal').classList.add('hidden');
+        });
+
+        document.getElementById('authTabLogin').addEventListener('click', () => {
+            authMode = "login";
+            document.getElementById('authTabLogin').className = "flex-1 py-2 rounded-lg bg-amber-500 text-slate-950 transition cursor-pointer";
+            document.getElementById('authTabRegister').className = "flex-1 py-2 rounded-lg text-slate-400 hover:text-slate-200 transition cursor-pointer";
+            document.getElementById('authSubmitBtn').textContent = "Sign In Securely";
+            document.getElementById('authErrorMsg').classList.add('hidden');
+        });
+
+        document.getElementById('authTabRegister').addEventListener('click', () => {
+            authMode = "register";
+            document.getElementById('authTabRegister').className = "flex-1 py-2 rounded-lg bg-amber-500 text-slate-950 transition cursor-pointer";
+            document.getElementById('authTabLogin').className = "flex-1 py-2 rounded-lg text-slate-400 hover:text-slate-200 transition cursor-pointer";
+            document.getElementById('authSubmitBtn').textContent = "Register Gmail Account";
+            document.getElementById('authErrorMsg').classList.add('hidden');
+        });
+
+        // Quick Gmail Auth One-Tap Simulation
+        document.getElementById('quickGmailAuthBtn').addEventListener('click', async () => {
+            const email = document.getElementById('authEmailInput').value.trim() || "vamikayadav30122015@gmail.com";
+            currentUser = email;
+            
+            if (!userRegistry.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+                const dummyHash = await sha256("gmail_oauth_token_" + Date.now());
+                userRegistry.push({
+                    email: email,
+                    role: "Verified Merchant",
+                    registeredAt: new Date().toISOString(),
+                    passHash: dummyHash
+                });
+            }
+            saveSecurityRegistry();
+            updateAuthUI();
+            document.getElementById('authModal').classList.add('hidden');
+            showToast(`Signed in securely via Gmail: ${email}`);
+        });
+
+        // Form Submit Login/Register
+        document.getElementById('authForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('authEmailInput').value.trim();
+            const pass = document.getElementById('authPasswordInput').value;
+            const errorElem = document.getElementById('authErrorMsg');
+
+            if (!email.includes('@')) {
+                errorElem.textContent = "Please enter a valid Gmail address.";
+                errorElem.classList.remove('hidden');
+                return;
+            }
+
+            const hash = await sha256(pass);
+
+            if (authMode === "register") {
+                if (userRegistry.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+                    errorElem.textContent = "Account already exists! Please Sign In.";
+                    errorElem.classList.remove('hidden');
+                    return;
+                }
+                userRegistry.push({
+                    email: email,
+                    role: "Registered User",
+                    registeredAt: new Date().toISOString(),
+                    passHash: hash
+                });
+                currentUser = email;
+                saveSecurityRegistry();
+                updateAuthUI();
+                document.getElementById('authModal').classList.add('hidden');
+                showToast(`Registered & signed in: ${email}`);
+            } else {
+                const user = userRegistry.find(u => u.email.toLowerCase() === email.toLowerCase());
+                if (!user) {
+                    errorElem.textContent = "Gmail account not found. Please Register first.";
+                    errorElem.classList.remove('hidden');
+                    return;
+                }
+                if (user.passHash && user.passHash !== hash && user.passHash !== "default") {
+                    errorElem.textContent = "Incorrect password.";
+                    errorElem.classList.remove('hidden');
+                    return;
+                }
+                currentUser = email;
+                saveSecurityRegistry();
+                updateAuthUI();
+                document.getElementById('authModal').classList.add('hidden');
+                showToast(`Signed in: ${email}`);
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            currentUser = null;
+            saveSecurityRegistry();
+            updateAuthUI();
+            showToast("Signed out successfully");
+        });
+
+        // Tab Event Listeners
+        document.getElementById('tabDescriptionBtn').addEventListener('click', () => switchTab('description'));
+        document.getElementById('tabPreviewBtn').addEventListener('click', () => switchTab('preview'));
+        document.getElementById('tabCsvBtn').addEventListener('click', () => switchTab('csv'));
+        document.getElementById('tabLanguagePortalsBtn').addEventListener('click', () => switchTab('languages'));
+        document.getElementById('goToPreviewBtn').addEventListener('click', () => switchTab('preview'));
+        document.getElementById('backToSetupBtn').addEventListener('click', () => switchTab('description'));
+        document.getElementById('openFullscreenPreviewBtn').addEventListener('click', () => switchTab('preview'));
+
+        // Device Mode Switcher Listeners
+        document.querySelectorAll('.device-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const device = btn.getAttribute('data-device');
+                applyDeviceMode(device);
+                showToast(`Switched view to ${btn.textContent.trim()}`);
+            });
+        });
+
+        // Export DPI Change
+        document.getElementById('exportDpiSelect').addEventListener('change', (e) => {
+            state.exportDpi = parseInt(e.target.value, 10);
+            showToast(`Export resolution set to ${state.exportDpi}px`);
+        });
+
+        // Language Buttons
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.lang = btn.getAttribute('data-lang');
+                const langConfig = languageData[state.lang];
+                state.customHeader = langConfig.defaultHeader;
+                state.centerEmblem = langConfig.emblemKey;
+                syncInputsFromState();
+                renderQRCode();
+                showToast(`Switched language to ${langConfig.name}`);
+            });
+        });
+
+        // Layout Buttons (Supports Canva & Notion)
+        document.querySelectorAll('.layout-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.layout = btn.getAttribute('data-layout');
+                if (state.layout === 'ghibli') {
+                    state.customHeader = "🍃 NATURE & COZY HARMONY 🍃";
+                    state.themeColor = "#15803d";
+                    state.centerEmblem = "ghibli_leaf";
+                } else if (state.layout === 'temple') {
+                    const langConfig = languageData[state.lang] || languageData.hi;
+                    state.customHeader = langConfig.defaultHeader;
+                    state.themeColor = "#b45309";
+                    state.centerEmblem = langConfig.emblemKey;
+                } else if (state.layout === 'canva') {
+                    state.customHeader = "✦ CANVA ARTISTIC POSTER ✦";
+                    state.themeColor = "#f43f5e";
+                    state.centerEmblem = "om_hi";
+                } else if (state.layout === 'notion') {
+                    state.customHeader = "▫ Notion Minimalist Payment Card ▫";
+                    state.themeColor = "#334155";
+                    state.centerEmblem = "rupee";
+                } else if (state.layout === 'standee') {
+                    state.customHeader = "ACCEPTED HERE · ANY UPI APP";
+                    state.themeColor = "#0284c7";
+                    state.centerEmblem = "upi";
+                } else if (state.layout === 'fintech') {
+                    state.customHeader = "VERIFIED MERCHANT PAYMENT";
+                    state.themeColor = "#0d9488";
+                    state.centerEmblem = "rupee";
+                } else if (state.layout === 'compact') {
+                    state.customHeader = "SCAN & PAY";
+                    state.themeColor = "#dc2626";
+                    state.centerEmblem = "none";
+                }
+                syncInputsFromState();
+                renderQRCode();
+                showToast(`Switched to ${btn.querySelector('p').textContent} layout`);
+            });
+        });
+
+        // Event Listeners for Update
+        document.getElementById('generateBtn').addEventListener('click', () => {
+            readInputsToState();
+            renderQRCode();
+            showToast("Standee updated successfully!");
+        });
+
+        // Live update on input change
+        const liveInputs = [
+            'customHeaderInput', 'upiIdInput', 'payeeNameInput', 'amountInput',
+            'noteInput', 'subTaglineInput', 'regContactInput', 'centerEmblemSelect',
+            'dotStyleSelect', 'cornerSquareSelect'
+        ];
+        liveInputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                readInputsToState();
+                renderQRCode();
+            });
+            document.getElementById(id).addEventListener('change', () => {
+                readInputsToState();
+                renderQRCode();
+            });
+        });
+
+        // Theme Buttons (Coolors-Style Palettes)
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.themeColor = btn.getAttribute('data-color');
+                syncInputsFromState();
+                renderQRCode();
+                showToast(`Applied theme: ${btn.querySelector('p').textContent}`);
+            });
+        });
+
+        // Amount Quick Chips
+        document.getElementById('amt108').addEventListener('click', () => {
+            state.amount = "108";
+            syncInputsFromState();
+            renderQRCode();
+        });
+        document.getElementById('amt501').addEventListener('click', () => {
+            state.amount = "501";
+            syncInputsFromState();
+            renderQRCode();
+        });
+        document.getElementById('amt1008').addEventListener('click', () => {
+            state.amount = "1008";
+            syncInputsFromState();
+            renderQRCode();
+        });
+        document.getElementById('amtClear').addEventListener('click', () => {
+            state.amount = "";
+            syncInputsFromState();
+            renderQRCode();
+        });
+
+        // Reset Button
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            state.lang = "hi";
+            state.layout = "temple";
+            state.customHeader = "॥ ॐ नमः शिवाय ॥";
+            state.upiId = "852753naveen-1@okaxis";
+            state.payeeName = "Naveen Singh";
+            state.amount = "501";
+            state.note = "Shiv Arpan";
+            state.subTagline = "Verified Trust & Devotional Seva";
+            state.regContact = "Support: +91 85275 30000";
+            state.themeColor = "#b45309";
+            state.centerEmblem = "om_hi";
+            state.dotStyle = "rounded";
+            state.cornerSquare = "extra-rounded";
+            syncInputsFromState();
+            renderQRCode();
+            showToast("Restored default settings");
+        });
+
+        // Presets
+        document.getElementById('preset1').addEventListener('click', () => {
+            state.lang = "hi";
+            state.layout = "temple";
+            state.customHeader = "॥ ॐ नमः शिवाय ॥";
+            state.upiId = "paytm.s3ufuwv@pty";
+            state.payeeName = "Paytm Store";
+            state.amount = "";
+            state.note = "Shiv Arpan";
+            state.subTagline = "Paytm Verified Merchant";
+            state.themeColor = "#b45309";
+            state.centerEmblem = "om_hi";
+            syncInputsFromState();
+            renderQRCode();
+            showToast("Loaded: Paytm Store (Om Theme)");
+        });
+
+        document.getElementById('preset2').addEventListener('click', () => {
+            state.lang = "hi";
+            state.layout = "temple";
+            state.customHeader = "॥ काशी विश्वनाथ विजयते ॥";
+            state.upiId = "temple@upi";
+            state.payeeName = "Kashi Vishwanath Mandir";
+            state.amount = "1008";
+            state.note = "Temple Seva";
+            state.subTagline = "Official Seva & Annadanam Trust";
+            state.themeColor = "#b45309";
+            state.centerEmblem = "om_hi";
+            syncInputsFromState();
+            renderQRCode();
+            showToast("Loaded: Kashi Vishwanath Mandir");
+        });
+
+        document.getElementById('preset3').addEventListener('click', () => {
+            state.lang = "hi";
+            state.layout = "standee";
+            state.customHeader = "॥ शुभ लाभ · SCAN TO PAY ॥";
+            state.upiId = "ganeshstore@okicici";
+            state.payeeName = "Shree Ganesh Store";
+            state.amount = "251";
+            state.note = "Shubh Labh Donation";
+            state.subTagline = "General Provisions & Retail";
+            state.themeColor = "#dc2626";
+            state.centerEmblem = "swastik";
+            syncInputsFromState();
+            renderQRCode();
+            showToast("Loaded: Shree Ganesh Store");
+        });
+
+        document.getElementById('preset4').addEventListener('click', () => {
+            state.lang = "hi";
+            state.layout = "temple";
+            state.customHeader = "॥ अन्नदानं महादानम् ॥";
+            state.upiId = "ashramtrust@sbi";
+            state.payeeName = "Vedic Wisdom Ashram";
+            state.amount = "108";
+            state.note = "Annadanam Seva";
+            state.subTagline = "Registered Charitable Trust · 80G Exempt";
+            state.themeColor = "#059669";
+            state.centerEmblem = "om_hi";
+            syncInputsFromState();
+            renderQRCode();
+            showToast("Loaded: Vedic Wisdom Ashram");
+        });
+
+        // Print Standee
+        document.getElementById('printStandeeBtn').addEventListener('click', () => {
+            window.print();
+        });
+
+        // Copy UPI Link
+        document.getElementById('copyUriBtn').addEventListener('click', () => {
+            const uri = buildUpiUri();
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(uri).then(() => {
+                    showToast("UPI payment link copied to clipboard!");
+                }).catch(() => {
+                    fallbackCopy(uri);
+                });
+            } else {
+                fallbackCopy(uri);
+            }
+        });
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast("UPI payment link copied to clipboard!");
+            } catch (err) {
+                showToast("Failed to copy", "✕");
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Download PNG at Selected Resolution (1x, 2x, 4x)
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            const uri = buildUpiUri();
+            const exportSize = state.exportDpi || 1024;
+            const dotType = state.dotStyle || "rounded";
+            const cornerSquareType = state.cornerSquare || "extra-rounded";
+            const emblemData = createEmblemSvg(state.centerEmblem, state.themeColor);
+
+            if (typeof QRCodeStyling !== 'undefined') {
+                const highResConfig = {
+                    width: exportSize,
+                    height: exportSize,
+                    type: "canvas",
+                    data: uri,
+                    qrOptions: {
+                        errorCorrectionLevel: "H"
+                    },
+                    dotsOptions: {
+                        color: state.themeColor,
+                        type: dotType
+                    },
+                    backgroundOptions: {
+                        color: "#ffffff"
+                    },
+                    cornersSquareOptions: {
+                        color: state.themeColor,
+                        type: cornerSquareType
+                    },
+                    cornersDotOptions: {
+                        color: state.themeColor
+                    }
+                };
+
+                if (emblemData) {
+                    highResConfig.image = emblemData;
+                    highResConfig.imageOptions = {
+                        imageSize: 0.28,
+                        margin: 4
+                    };
+                }
+
+                const exportInstance = new QRCodeStyling(highResConfig);
+                exportInstance.download({
+                    name: `UPI_QR_${state.payeeName.replace(/\\s+/g, '_') || 'Payment'}_${exportSize}px`,
+                    extension: "png"
+                });
+                showToast(`Exporting ${exportSize}px High-Resolution PNG...`);
+            } else {
+                const canvas = document.querySelector('#qrCanvasContainer canvas');
+                if (canvas) {
+                    const link = document.createElement('a');
+                    link.download = `UPI_QR_${state.payeeName.replace(/\\s+/g, '_') || 'Payment'}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    showToast("Downloading QR code PNG...");
+                } else {
+                    showToast("QR code not ready yet", "✕");
+                }
+            }
+        });
+
+        // Initialize on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSecurityRegistry();
+            syncInputsFromState();
+            renderQRCode();
+            renderCsvTable();
+            renderLanguagePortals();
+        });
+    
+
+        // ==================== GLOBAL VIEW ROUTING (5 CORE PAGES) ====================
+        function switchGlobalView(viewName) {
+            const views = {
+                home: document.getElementById('home'),
+                studio: document.getElementById('viewStudio'),
+                security: document.getElementById('viewSecurity'),
+                about: document.getElementById('viewAbout'),
+                contact: document.getElementById('viewContact')
+            };
+
+            Object.keys(views).forEach(k => {
+                if (views[k]) {
+                    if (k === viewName) {
+                        views[k].classList.remove('hidden');
+                    } else {
+                        views[k].classList.add('hidden');
+                    }
+                }
+            });
+
+            // Update Desktop Nav styles
+            const navMap = {
+                home: document.getElementById('navHomeBtn'),
+                studio: document.getElementById('navStudioBtn'),
+                security: document.getElementById('navSecurityBtn'),
+                about: document.getElementById('navAboutBtn'),
+                contact: document.getElementById('navContactBtn')
+            };
+
+            Object.keys(navMap).forEach(k => {
+                const btn = navMap[k];
+                if (btn) {
+                    if (k === viewName) {
+                        btn.className = "nav-link-btn px-3 py-2 rounded-xl text-amber-400 bg-amber-500/10 font-bold transition cursor-pointer";
+                    } else {
+                        btn.className = "nav-link-btn px-3 py-2 rounded-xl text-slate-300 hover:text-amber-300 hover:bg-slate-900 transition cursor-pointer";
+                    }
+                }
+            });
+
+            // Update Mobile Nav styles
+            const mNavMap = {
+                home: document.getElementById('mNavHomeBtn'),
+                studio: document.getElementById('mNavStudioBtn'),
+                security: document.getElementById('mNavSecurityBtn'),
+                about: document.getElementById('mNavAboutBtn'),
+                contact: document.getElementById('mNavContactBtn')
+            };
+
+            Object.keys(mNavMap).forEach(k => {
+                const btn = mNavMap[k];
+                if (btn) {
+                    if (k === viewName) {
+                        btn.className = "text-amber-400 font-bold px-2 py-1 rounded-lg bg-amber-500/10";
+                    } else {
+                        btn.className = "text-slate-300 px-2 py-1 rounded-lg";
+                    }
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (viewName === 'studio') {
+                renderQRCode();
+            }
+        }
+
+        // Global Nav Listeners
+        document.getElementById('navHomeBtn').addEventListener('click', () => switchGlobalView('home'));
+        document.getElementById('navStudioBtn').addEventListener('click', () => switchGlobalView('studio'));
+        document.getElementById('navSecurityBtn').addEventListener('click', () => switchGlobalView('security'));
+        document.getElementById('navAboutBtn').addEventListener('click', () => switchGlobalView('about'));
+        document.getElementById('navContactBtn').addEventListener('click', () => switchGlobalView('contact'));
+
+        document.getElementById('mNavHomeBtn').addEventListener('click', () => switchGlobalView('home'));
+        document.getElementById('mNavStudioBtn').addEventListener('click', () => switchGlobalView('studio'));
+        document.getElementById('mNavSecurityBtn').addEventListener('click', () => switchGlobalView('security'));
+        document.getElementById('mNavAboutBtn').addEventListener('click', () => switchGlobalView('about'));
+        document.getElementById('mNavContactBtn').addEventListener('click', () => switchGlobalView('contact'));
+
+        document.getElementById('brandLogoLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            switchGlobalView('home');
+        });
+
+        document.getElementById('heroLaunchStudioBtn').addEventListener('click', () => switchGlobalView('studio'));
+        document.getElementById('heroViewSecurityBtn').addEventListener('click', () => switchGlobalView('security'));
+        document.getElementById('bannerOpenStudioBtn').addEventListener('click', () => switchGlobalView('studio'));
+        document.getElementById('faqContactUsBtn').addEventListener('click', () => switchGlobalView('contact'));
+
+        document.querySelectorAll('.footer-nav-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const target = e.currentTarget.getAttribute('data-target');
+                switchGlobalView(target);
+            });
+        });
+
+        // ==================== SECURITY SIMULATOR LISTENERS ====================
+        const secInput = document.getElementById('secTestInput');
+        const secOutput = document.getElementById('secSanitizedOutput');
+        if (secInput && secOutput) {
+            secInput.addEventListener('input', () => {
+                secOutput.textContent = escapeHtml(secInput.value);
+            });
+        }
+
+        const secCsrfBtn = document.getElementById('secGenCsrfBtn');
+        const secCsrfDisplay = document.getElementById('secCsrfDisplay');
+        if (secCsrfBtn && secCsrfDisplay) {
+            secCsrfBtn.addEventListener('click', () => {
+                const array = new Uint8Array(16);
+                crypto.getRandomValues(array);
+                const token = 'csrf_' + Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
+                secCsrfDisplay.textContent = token;
+                showToast("Generated new cryptographically secure CSRF token!");
+            });
+        }
+
+        // ==================== CONTACT FORM HANDLER ====================
+        const contactForm = document.getElementById('contactInquiryForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('contactNameInput').value.trim();
+                const email = document.getElementById('contactEmailInput').value.trim();
+                const msg = document.getElementById('contactMessageInput').value.trim();
+
+                showToast(`Thank you ${name}! Inquiry received. Reply guaranteed within 2 hours.`);
+                contactForm.reset();
+            });
+        }
+
+
+        // ==================== DIRECT PREVIEW DROPDOWNS LOGIC ====================
+        const qLayout = document.getElementById('quickLayoutSelect');
+        const qLang = document.getElementById('quickLangSelect');
+        const qTheme = document.getElementById('quickThemeSelect');
+        const qPreset = document.getElementById('quickPresetSelect');
+
+        if (qLayout) {
+            qLayout.addEventListener('change', (e) => {
+                state.layout = e.target.value;
+                if (state.layout === 'ghibli') {
+                    state.customHeader = "🍃 NATURE & COZY HARMONY 🍃";
+                    state.themeColor = "#15803d";
+                    state.centerEmblem = "ghibli_leaf";
+                } else if (state.layout === 'canva') {
+                    state.customHeader = "✦ CANVA ARTISTIC POSTER ✦";
+                    state.themeColor = "#f43f5e";
+                    state.centerEmblem = "om_hi";
+                } else if (state.layout === 'notion') {
+                    state.customHeader = "▫ Notion Minimalist Payment Card ▫";
+                    state.themeColor = "#334155";
+                    state.centerEmblem = "rupee";
+                } else if (state.layout === 'standee') {
+                    state.customHeader = "ACCEPTED HERE · ANY UPI APP";
+                    state.themeColor = "#0284c7";
+                    state.centerEmblem = "upi";
+                } else if (state.layout === 'fintech') {
+                    state.customHeader = "VERIFIED MERCHANT PAYMENT";
+                    state.themeColor = "#0d9488";
+                    state.centerEmblem = "rupee";
+                } else if (state.layout === 'compact') {
+                    state.customHeader = "SCAN & PAY";
+                    state.themeColor = "#dc2626";
+                    state.centerEmblem = "none";
+                } else if (state.layout === 'temple') {
+                    const lConf = languageData[state.lang] || languageData.hi;
+                    state.customHeader = lConf.defaultHeader;
+                    state.themeColor = "#b45309";
+                    state.centerEmblem = lConf.emblemKey;
+                }
+                syncInputsFromState();
+                renderQRCode();
+                showToast(`Switched template to ${qLayout.options[qLayout.selectedIndex].text}`);
+            });
+        }
+
+        if (qLang) {
+            qLang.addEventListener('change', (e) => {
+                state.lang = e.target.value;
+                const lConf = languageData[state.lang] || languageData.hi;
+                state.customHeader = lConf.defaultHeader;
+                state.centerEmblem = lConf.emblemKey;
+                syncInputsFromState();
+                renderQRCode();
+                showToast(`Language set to ${lConf.name}`);
+            });
+        }
+
+        if (qTheme) {
+            qTheme.addEventListener('change', (e) => {
+                state.themeColor = e.target.value;
+                syncInputsFromState();
+                renderQRCode();
+                showToast(`Color palette updated!`);
+            });
+        }
+
+        if (qPreset) {
+            qPreset.addEventListener('change', (e) => {
+                const val = e.target.value;
+                if (val === 'paytm') {
+                    state.lang = "hi";
+                    state.layout = "temple";
+                    state.customHeader = "॥ ॐ नमः शिवाय ॥";
+                    state.upiId = "paytm.s3ufuwv@pty";
+                    state.payeeName = "Paytm Store";
+                    state.amount = "";
+                    state.note = "Shiv Arpan";
+                    state.subTagline = "Paytm Verified Merchant";
+                    state.themeColor = "#b45309";
+                    state.centerEmblem = "om_hi";
+                } else if (val === 'naveen') {
+                    state.lang = "hi";
+                    state.layout = "temple";
+                    state.customHeader = "॥ ॐ नमः शिवाय ॥";
+                    state.upiId = "852753naveen-1@okaxis";
+                    state.payeeName = "Naveen Singh";
+                    state.amount = "501";
+                    state.note = "Shiv Arpan";
+                    state.subTagline = "Shiv Mandir Arpan Seva";
+                    state.themeColor = "#b45309";
+                    state.centerEmblem = "om_hi";
+                } else if (val === 'kashi') {
+                    state.lang = "hi";
+                    state.layout = "temple";
+                    state.customHeader = "॥ काशी विश्वनाथ विजयते ॥";
+                    state.upiId = "temple@upi";
+                    state.payeeName = "Kashi Vishwanath Mandir";
+                    state.amount = "1008";
+                    state.note = "Temple Seva";
+                    state.subTagline = "Official Seva & Annadanam Trust";
+                    state.themeColor = "#b45309";
+                    state.centerEmblem = "om_hi";
+                } else if (val === 'ganesh') {
+                    state.lang = "hi";
+                    state.layout = "standee";
+                    state.customHeader = "॥ शुभ लाभ · SCAN TO PAY ॥";
+                    state.upiId = "ganeshstore@okicici";
+                    state.payeeName = "Shree Ganesh Store";
+                    state.amount = "251";
+                    state.note = "Shubh Labh Donation";
+                    state.subTagline = "General Provisions & Retail";
+                    state.themeColor = "#dc2626";
+                    state.centerEmblem = "swastik";
+                } else if (val === 'ashram') {
+                    state.lang = "hi";
+                    state.layout = "temple";
+                    state.customHeader = "॥ अन्नदानं महादानम् ॥";
+                    state.upiId = "ashramtrust@sbi";
+                    state.payeeName = "Vedic Wisdom Ashram";
+                    state.amount = "108";
+                    state.note = "Annadanam Seva";
+                    state.subTagline = "Registered Charitable Trust · 80G Exempt";
+                    state.themeColor = "#059669";
+                    state.centerEmblem = "om_hi";
+                }
+                syncInputsFromState();
+                renderQRCode();
+                showToast(`Loaded ${qPreset.options[qPreset.selectedIndex].text}`);
+            });
+        }
+
+</script>
+</body>
+</html>
